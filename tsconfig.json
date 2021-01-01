@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		/* Visit https://aka.ms/tsconfig.json to read more about this file */
+		"target": "ES5",
+		"module": "ES2020",
+		"lib": [
+			"dom",
+			"es5",
+			"es2015.collection"
+			// Only Map and Set from this are supported in IE 11.
+		],
+		"outDir": "./build",
+		"sourceMap": true,
+		"moduleResolution": "node",
+		"types": [
+			"./node_modules/types-mediawiki",
+			"./node_modules/@types/select2",
+			// XXX: there has to be a better way to do this
+			"../twinkle-core/morebits/morebits.d.ts",
+			"./jquery.d.ts"
+		],
+		"esModuleInterop": true,
+		"newLine": "lf"
+	},
+	"include": [
+		"src/**/*",
+		"../twinkle-core/morebits/morebits.d.ts"
+	],
+	"compileOnSave": true
+}

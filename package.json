@@ -1,0 +1,25 @@
+{
+	"title": "Twinkle enwiki",
+	"name": "twinkl-enwiki",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wikimedia-gadgets/twinkle-enwiki"
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
+	"dependencies": {
+		"@types/select2": "^4.0.53",
+		"twinkle-core": "local"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^4.11.1",
+		"@typescript-eslint/parser": "^4.11.1",
+		"eslint": "^7.15.0",
+		"ts-loader": "^8.0.13",
+		"typescript": "^4.1.2",
+		"webpack": "^5.11.1",
+		"webpack-cli": "^4.3.1"
+	}
+}
