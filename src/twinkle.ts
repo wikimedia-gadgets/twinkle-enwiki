@@ -17,14 +17,14 @@ Twinkle.summaryAd = ' ([[WP:TW|TW]])';
 
 Twinkle.init();
 
-let registeredModules: (typeof TwinkleModule)[] = [
+Twinkle.registeredModules = [
 	Xfd,
 	Tag,
 	Speedy,
 	Diff
 ];
 
-for (let module of registeredModules) {
+for (let module of Twinkle.registeredModules) {
 	Twinkle.addInitCallback(() => new module(), module.moduleName);
 }
 

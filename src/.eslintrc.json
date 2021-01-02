@@ -1,7 +1,12 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jquery": true
+    },
+    "globals": {
+        "mw": "readonly",
+        "Morebits": "readonly"
     },
     "extends": [
         "eslint:recommended"
@@ -14,5 +19,11 @@
     "plugins": [
         "@typescript-eslint"
     ],
-    "rules": {}
+    "rules": {
+        "no-undef": "off", // typescript takes better care of these
+
+        // See https://github.com/typescript-eslint/typescript-eslint/pull/688
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars-experimental": "error"
+    }
 }
