@@ -1,1 +1,1 @@
-export * from '../../twinkle-core/src/utils';
+export * from 'twinkle-core/src/utils';

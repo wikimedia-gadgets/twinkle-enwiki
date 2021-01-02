@@ -8,7 +8,7 @@ const header =
  * |                   Changes to this page affect many users.                     |
  * |  Please discuss changes on the talk page or on [[WT:Gadget]] before editing.  |
  * |_______________________________________________________________________________|
- * 
+ *
  * Built from source code at GitHub repository [https://github.com/wikimedia-gadgets/twinkle-enwiki]
  * All changes should be made in the repository, otherwise they will be lost.
  */
@@ -57,7 +57,10 @@ module.exports = function(grunt) {
 			options: {
 				separator: '\n',
 				banner: header,
-				footer: footer
+				footer: footer,
+				stripBanners: {
+					block: true
+				}
 			},
 			dist: {
 				src: [ OUTPUT_FILE ],

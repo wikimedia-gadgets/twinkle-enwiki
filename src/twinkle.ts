@@ -1,4 +1,4 @@
-import { Twinkle, TwinkleModule } from '../../twinkle-core';
+import { Twinkle } from 'twinkle-core';
 
 // import modules
 import { Xfd } from './xfd';

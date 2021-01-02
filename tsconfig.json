@@ -12,7 +12,11 @@
 		"outDir": "./build",
 		"sourceMap": true,
 		"moduleResolution": "node",
-//		"importHelpers": true,
+
+		// With importHelpers=true, TS helper functions are prevented from
+		// being duplicated for every source file
+		"importHelpers": true,
+
 		"types": [
 			"./node_modules/types-mediawiki",
 			"./node_modules/@types/select2",
