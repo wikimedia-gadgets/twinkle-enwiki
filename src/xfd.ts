@@ -1,6 +1,6 @@
 import { Twinkle } from './core';
 import { addNs, arr_includes, makeTemplate, obj_entries, stripNs } from './utils';
-import { toTLACase, Xfd, XfdMode } from './core';
+import { toTLACase, XfdCore as Xfd, XfdMode } from './core';
 import { makeFindSourcesDiv, hatnoteRegex } from './common';
 
 

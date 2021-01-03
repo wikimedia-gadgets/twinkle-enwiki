@@ -1,10 +1,11 @@
-import { Twinkle } from 'twinkle-core';
+import { Twinkle } from './core';
 
 // import modules
 import { Xfd } from './xfd';
 import { Tag } from './tag';
 import { Speedy } from './speedy';
-import { Diff } from './core'; // no customisation; import directly from core
+import { Warn } from "./warn";
+import { DiffCore as Diff } from './core'; // no customisation; import directly from core
 
 // Check if account is experienced enough to use Twinkle
 if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
@@ -21,7 +22,8 @@ Twinkle.registeredModules = [
 	Xfd,
 	Tag,
 	Speedy,
-	Diff
+	Diff,
+	Warn
 ];
 
 for (let module of Twinkle.registeredModules) {

@@ -1,6 +1,6 @@
 import { Twinkle } from './core';
 import { arr_includes } from './utils';
-import { Tag, tagData, tagListType, TagMode, tagSubgroup } from './core';
+import { TagCore, tagData, tagListType, TagMode, tagSubgroup } from './core';
 import { hatnoteRegex } from './common';
 
 const redirectTagList: tagListType = {
@@ -1217,7 +1217,7 @@ class ArticleMode extends TagMode {
 				let pageText = this.insertTagText(this.getTagText(otherTagName) + '\n',
 					otherpage.getPageText());
 				otherpage.setPageText(pageText);
-				otherpage.setEditSummary(Tag.makeEditSummary([otherTagName], []));
+				otherpage.setEditSummary(TagCore.makeEditSummary([otherTagName], []));
 				otherpage.setWatchlist(Twinkle.getPref('watchTaggedPages'));
 				otherpage.setMinorEdit(Twinkle.getPref('markTaggedPagesAsMinor'));
 				otherpage.setCreateOption('nocreate');
@@ -1418,13 +1418,13 @@ class FileMode extends TagMode {
 }
 
 
+
 // Override to change modes available,
 // each mode is a class extending TagMode
-Tag.modeList = [
+TagCore.modeList = [
 	RedirectMode, // keep RedirectMode above ArticleMode
 	ArticleMode,
 	FileMode
 ];
 
-export { Tag };
-
+export {TagCore as Tag};

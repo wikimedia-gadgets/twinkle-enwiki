@@ -1,4 +1,4 @@
-import { Speedy as SpeedyCore, criterion } from "./core";
+import { SpeedyCore, criterion } from "./core";
 import { arr_includes } from './utils';
 import { hatnoteRegex } from './common';
 
