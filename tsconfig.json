@@ -20,14 +20,14 @@
 		"types": [
 			"./node_modules/types-mediawiki",
 			"./node_modules/@types/select2",
-			"./node_modules/twinkle-core/morebits/morebits.d.ts"
+			"./node_modules/twinkle-core/morebits"
 		],
 		"esModuleInterop": true,
 		"newLine": "lf"
 	},
 	"include": [
 		"src/**/*",
-		"./node_modules/twinkle-core/morebits/morebits.d.ts"
+		"./node_modules/twinkle-core/morebits/index.d.ts"
 	],
 	"compileOnSave": true
 }

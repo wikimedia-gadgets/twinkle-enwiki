@@ -1,10 +1,13 @@
-import { Twinkle } from 'twinkle-core';
+import { Twinkle, loadMessages } from 'twinkle-core';
 
 // import modules
 import { Xfd } from './xfd';
 import { Tag } from './tag';
 import { Speedy } from './speedy';
 import { Diff } from './core'; // no customisation; import directly from core
+
+// import messages for core components
+import messages from './messages';
 
 // Check if account is experienced enough to use Twinkle
 if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
@@ -16,6 +19,8 @@ Twinkle.changeTags = 'twinkle';
 Twinkle.summaryAd = ' ([[WP:TW|TW]])';
 
 Twinkle.init();
+
+loadMessages(messages);
 
 Twinkle.registeredModules = [
 	Xfd,

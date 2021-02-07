@@ -1,7 +1,15 @@
-import { Twinkle } from './core';
+import { Api, Page, Twinkle } from './core';
 import { addNs, arr_includes, makeTemplate, obj_entries, stripNs } from './utils';
-import { toTLACase, Xfd, XfdMode } from './core';
+import { toTLACase, Xfd as XfdCore, XfdMode } from './core';
 import { makeFindSourcesDiv, hatnoteRegex } from './common';
+
+class Xfd extends XfdCore {
+	footerLinks = {
+		'About deletion discussions': 'WP:XFD',
+		'XfD prefs': 'WP:TW/PREF#xfd',
+		'Twinkle help': 'WP:TW/DOC#xfd',
+	};
+}
 
 
 class Afd extends XfdMode {
@@ -185,7 +193,7 @@ class Afd extends XfdMode {
 	 */
 	checkPage() {
 
-		var pageobj = new Twinkle.page(mw.config.get('wgPageName'), 'Adding deletion tag to article');
+		var pageobj = new Page(mw.config.get('wgPageName'), 'Adding deletion tag to article');
 		pageobj.setFollowRedirect(true);  // should never be needed, but if the article is moved, we would want to follow the redirect
 		return pageobj.load().then((pageobj) => {
 			var text = pageobj.getPageText();
@@ -259,7 +267,7 @@ class Afd extends XfdMode {
 
 	createDiscussionPage() {
 		let params = this.params;
-		var pageobj = new Twinkle.page(params.discussionpage, 'Creating article deletion discussion page');
+		var pageobj = new Page(params.discussionpage, 'Creating article deletion discussion page');
 		return pageobj.load().then((pageobj) => {
 			pageobj.setPageText(this.getDiscussionWikitext());
 			pageobj.setEditSummary('Creating deletion discussion page for [[:' + Morebits.pageNameNorm + ']].');
@@ -274,7 +282,7 @@ class Afd extends XfdMode {
 		let params = this.params;
 
 		var date = new Morebits.date(params.articleLoadTime);
-		var pageobj = new Twinkle.page('Wikipedia:Articles for deletion/Log/' +
+		var pageobj = new Page('Wikipedia:Articles for deletion/Log/' +
 			date.format('YYYY MMMM D', 'utc'), "Adding discussion to today's list");
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
@@ -311,7 +319,7 @@ class Afd extends XfdMode {
 	addToDelsortLists() {
 		let params = this.params;
 		let promises = params.delsortCats.map((cat, idx) => {
-			var delsortPage = new Twinkle.page('Wikipedia:WikiProject Deletion sorting/' + cat, 'Adding to list of ' + cat + '-related deletion discussions');
+			var delsortPage = new Page('Wikipedia:WikiProject Deletion sorting/' + cat, 'Adding to list of ' + cat + '-related deletion discussions');
 			delsortPage.setFollowRedirect(true); // In case a category gets renamed
 			return delsortPage.load().then((pageobj) => {
 				var discussionPage = params.discussionpage;
@@ -329,7 +337,7 @@ class Afd extends XfdMode {
 
 	patrolPage() {
 		if (Twinkle.getPref('markXfdPagesAsPatrolled')) {
-			new Twinkle.page(Morebits.pageNameNorm).triage();
+			new Page(Morebits.pageNameNorm).triage();
 		}
 		return $.Deferred().resolve(); // XXX
 	}
@@ -474,7 +482,7 @@ class Tfd extends XfdMode {
 
 	tagPageForDeletion() {
 		let params = this.params;
-		let pageobj = new Twinkle.page(Morebits.pageNameNorm + (params.scribunto ? '/doc' : ''),
+		let pageobj = new Page(Morebits.pageNameNorm + (params.scribunto ? '/doc' : ''),
 			'Tagging ' + (params.scribunto ? 'module documentation' : 'template') + ' with ' +
 			'deletion tag');
 		pageobj.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
@@ -516,7 +524,7 @@ class Tfd extends XfdMode {
 		let docOrNot = params.scribunto ? '/doc' : '';
 		let moduleDocOrTemplate = params.scribunto ? 'module documentation' : 'template';
 
-		let pageobj = new Twinkle.page(`${Morebits.pageNameNorm}${docOrNot}`,
+		let pageobj = new Page(`${Morebits.pageNameNorm}${docOrNot}`,
 			`Tagging ${moduleDocOrTemplate} with merge tag`);
 		pageobj.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
 
@@ -525,7 +533,7 @@ class Tfd extends XfdMode {
 			return this.tagForMerge(pageobj, this.params);
 		});
 
-		let otherpageobj = new Twinkle.page(`${params.otherTemplateName}${docOrNot}`,
+		let otherpageobj = new Page(`${params.otherTemplateName}${docOrNot}`,
 			`Tagging other ${moduleDocOrTemplate} with merge tag`);
 		otherpageobj.setFollowRedirect(true);
 
@@ -540,7 +548,7 @@ class Tfd extends XfdMode {
 	}
 
 	/**
-	 * @param {Twinkle.page} pageobj - pageobj should be already loaded
+	 * @param {Page} pageobj - pageobj should be already loaded
 	 * @param {Object} params - we can't just use this.params since
 	 * that would be incorrect when tagging the "other" page
 	 */
@@ -580,7 +588,7 @@ class Tfd extends XfdMode {
 	addToList() {
 		let params = this.params;
 
-		var pageobj = new Twinkle.page(params.logpage, "Adding discussion to today's log");
+		var pageobj = new Page(params.logpage, "Adding discussion to today's log");
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
 			var statelem = pageobj.getStatusElement();
@@ -615,7 +623,7 @@ class Tfd extends XfdMode {
 		if (!this.params.otherTemplateName) {
 			return $.Deferred().resolve();
 		}
-		return new Twinkle.page(this.params.otherTemplateName, 'Finding other page creator').lookupCreation().then(page => {
+		return new Page(this.params.otherTemplateName, 'Finding other page creator').lookupCreation().then(page => {
 			let otherpagecreator = page.getCreator();
 			page.getStatusElement().info('Found ' + otherpagecreator);
 			if (otherpagecreator === this.params.initialContrib) {
@@ -669,7 +677,7 @@ class Tfd extends XfdMode {
 			// Watch other module too
 			watch_query.titles.push(params.otherTemplateName);
 		}
-		return new Morebits.wiki.api('Adding Module to watchlist', watch_query).post();
+		return new Api('Adding Module to watchlist', watch_query).post();
 	}
 
 	getDiscussionWikitext(): string {
@@ -757,7 +765,7 @@ class Ffd extends XfdMode {
 
 	tagPage() {
 		let params = this.params;
-		let pageobj = new Twinkle.page(mw.config.get('wgPageName'), 'Adding deletion tag to file page');
+		let pageobj = new Page(mw.config.get('wgPageName'), 'Adding deletion tag to file page');
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
 			var text = pageobj.getPageText();
@@ -784,7 +792,7 @@ class Ffd extends XfdMode {
 
 	addToList() {
 		let params = this.params;
-		var wikipedia_page = new Twinkle.page(params.logpage, "Adding discussion to today's list");
+		var wikipedia_page = new Page(params.logpage, "Adding discussion to today's list");
 		wikipedia_page.setFollowRedirect(true);
 		return wikipedia_page.load().then((pageobj) => {
 			var text = pageobj.getPageText();
@@ -937,7 +945,7 @@ class Cfd extends XfdMode {
 
 	tagPage() {
 		var params = this.params;
-		var pageobj = new Twinkle.page(mw.config.get('wgPageName'), 'Tagging category with ' + params.action + ' tag');
+		var pageobj = new Page(mw.config.get('wgPageName'), 'Tagging category with ' + params.action + ' tag');
 		pageobj.setFollowRedirect(true); // should never be needed, but if the page is moved, we would want to follow the redirect
 		return pageobj.load().then((pageobj) => {
 
@@ -970,7 +978,7 @@ class Cfd extends XfdMode {
 
 	addToList() {
 		var params = this.params;
-		var pageobj = new Twinkle.page(params.logpage, "Adding discussion to today's list");
+		var pageobj = new Page(params.logpage, "Adding discussion to today's list");
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
 			var statelem = pageobj.getStatusElement();
@@ -1094,7 +1102,7 @@ class Cfds extends XfdMode {
 
 	tagPage() {
 		let params = this.params;
-		let pageobj = new Twinkle.page(mw.config.get('wgPageName'), 'Tagging category with rename tag');
+		let pageobj = new Page(mw.config.get('wgPageName'), 'Tagging category with rename tag');
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
 			var text = pageobj.getPageText();
@@ -1112,7 +1120,7 @@ class Cfds extends XfdMode {
 	}
 
 	addToList() {
-		let pageobj = new Twinkle.page('Wikipedia:Categories for discussion/Speedy', 'Adding discussion to the list');
+		let pageobj = new Page('Wikipedia:Categories for discussion/Speedy', 'Adding discussion to the list');
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
 			var old_text = pageobj.getPageText();
@@ -1221,7 +1229,7 @@ class Mfd extends XfdMode {
 
 	tagPage() {
 		let params = this.params;
-		var pageobj = new Twinkle.page(mw.config.get('wgPageName'), 'Tagging page with deletion tag');
+		var pageobj = new Page(mw.config.get('wgPageName'), 'Tagging page with deletion tag');
 		pageobj.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
 		return pageobj.load().then((pageobj) => {
 			var text = pageobj.getPageText();
@@ -1251,7 +1259,7 @@ class Mfd extends XfdMode {
 
 	createDiscussionPage() {
 		let params = this.params;
-		let pageobj = new Twinkle.page(params.discussionpage, 'Creating deletion discussion page');
+		let pageobj = new Page(params.discussionpage, 'Creating deletion discussion page');
 		return pageobj.load().then(pageobj => {
 			pageobj.setPageText(this.getDiscussionWikitext());
 			pageobj.setEditSummary('Creating deletion discussion page for [[:' + Morebits.pageNameNorm + ']].');
@@ -1270,7 +1278,7 @@ class Mfd extends XfdMode {
 
 	addToList() {
 		let params = this.params;
-		let pageobj = new Twinkle.page('Wikipedia:Miscellany for deletion', "Adding discussion to today's list");
+		let pageobj = new Page('Wikipedia:Miscellany for deletion', "Adding discussion to today's list");
 		pageobj.setPageSection(2);
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
@@ -1412,7 +1420,7 @@ class Rfd extends XfdMode {
 			// to skip target checks in findTargetCallback
 			this.params.rfdtarget = document.getElementById('softredirect').textContent.replace(/^:+/, '');
 		}
-		var wikipedia_api = new Morebits.wiki.api('Finding target of redirect', query);
+		var wikipedia_api = new Api('Finding target of redirect', query);
 		return wikipedia_api.post().then((apiobj) => {
 			var response = apiobj.getResponse();
 			this.params.curtimestamp = response.curtimestamp;
@@ -1439,7 +1447,7 @@ class Rfd extends XfdMode {
 	tagPage(): JQuery.Promise<void> {
 		let params = this.params;
 
-		var pageobj = new Twinkle.page(mw.config.get('wgPageName'), 'Adding deletion tag to redirect');
+		var pageobj = new Page(mw.config.get('wgPageName'), 'Adding deletion tag to redirect');
 		pageobj.setFollowRedirect(false);
 		return pageobj.load().then((pageobj) => {
 			var text = pageobj.getPageText();
@@ -1469,7 +1477,7 @@ class Rfd extends XfdMode {
 
 	addToList(): JQuery.Promise<void> {
 		let params = this.params;
-		let pageobj = new Twinkle.page(params.logpage, 'Adding discussion to today\'s log');
+		let pageobj = new Page(params.logpage, 'Adding discussion to today\'s log');
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then((pageobj) => {
 			var statelem = pageobj.getStatusElement();
@@ -1601,7 +1609,7 @@ class Rm extends XfdMode {
 
 	listAtTalk() {
 		let params = this.params;
-		let pageobj = new Twinkle.page(params.discussionpage, 'Adding entry on talk page');
+		let pageobj = new Page(params.discussionpage, 'Adding entry on talk page');
 		pageobj.setAppendText('\n\n' + this.getDiscussionWikitext());
 		pageobj.setFollowRedirect(true);
 		pageobj.setEditSummary('Proposing move' + (params.newname ? ' to [[:' + params.newname + ']]' : ''));
@@ -1612,7 +1620,7 @@ class Rm extends XfdMode {
 	}
 
 	listAtRMTR() {
-		let pageobj = new Twinkle.page(this.params.discussionpage, 'Adding entry at WP:RM/TR');
+		let pageobj = new Page(this.params.discussionpage, 'Adding entry at WP:RM/TR');
 		pageobj.setFollowRedirect(true);
 		pageobj.setPageSection(2);
 		return pageobj.load().then((pageobj) => {
