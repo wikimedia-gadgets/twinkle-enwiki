@@ -1,30 +1,40 @@
-export default {
+const tsJestOptions = {
+	'ts-jest': {
+		diagnostics: {
+			warnOnly: true,
+		},
+	}
+};
+
+module.exports = {
 	projects: [
 		{
 			displayName: 'unit',
-			testMatch: ['<rootDir>/tests/unit/*'],
+			testMatch: ['<rootDir>/tests/unit/*.test.[jt]s'],
 			preset: 'ts-jest',
 			testEnvironment: 'jsdom',
 			setupFilesAfterEnv: ['mock-mediawiki'],
 			globals: {
-				'ts-jest': {
-					diagnostics: {
-						warnOnly: true,
-					},
-				},
+				...tsJestOptions
 			},
 		},
 		{
 			displayName: 'integration',
-			testMatch: ['<rootDir>/tests/integration/*'],
+			testMatch: ['<rootDir>/tests/integration/*.test.[jt]s'],
 			preset: 'jest-playwright-preset',
+			transform: {
+				'^.+\\.ts$': 'ts-jest',
+			},
 			testEnvironmentOptions: {
 				'jest-playwright': {
 					launchOptions: {
-						headless: true,
+						headless: !process.env.DEBUG,
 					},
-					browsers: ['chromium', 'firefox', 'webkit'],
+					browsers: process.env.DEBUG ? ['chromium'] : ['chromium', 'firefox', 'webkit'],
 				},
+			},
+			globals: {
+				...tsJestOptions
 			},
 		},
 	],

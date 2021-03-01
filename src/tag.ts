@@ -1,4 +1,4 @@
-import { Twinkle } from './core';
+import { Twinkle, Page } from './core';
 import { arr_includes } from './utils';
 import { TagCore, tagData, tagListType, TagMode, tagSubgroup } from './core';
 import { hatnoteRegex } from './common';
@@ -1181,14 +1181,14 @@ class ArticleMode extends TagMode {
 		});
 	}
 
-	postSave(pageobj: InstanceType<typeof Twinkle.page>) {
+	postSave(pageobj: Page) {
 		let params = this.params;
 		let promises = [];
 
 		// special functions for merge tags
 		if (params.mergeReason) {
 			// post the rationale on the talk page (only operates in main namespace)
-			var talkpage = new Twinkle.page('Talk:' + params.discussArticle, 'Posting rationale on talk page');
+			var talkpage = new Page('Talk:' + params.discussArticle, 'Posting rationale on talk page');
 			talkpage.setNewSectionText(params.mergeReason.trim() + ' ~~~~');
 			talkpage.setNewSectionTitle(params.talkDiscussionTitleLinked);
 			talkpage.setChangeTags(Twinkle.changeTags);
@@ -1205,10 +1205,10 @@ class ArticleMode extends TagMode {
 			} else if (params.mergeTag === 'Merge to') {
 				otherTagName = 'Merge from';
 			}
-			var otherpage = new Twinkle.page(params.mergeTarget, 'Tagging other page (' +
+			var otherpage = new Page(params.mergeTarget, 'Tagging other page (' +
 				params.mergeTarget + ')');
 			otherpage.setChangeTags(Twinkle.changeTags);
-			promises.push(otherpage.load().then((otherpage) => {
+			promises.push(otherpage.load().then(() => {
 				this.templateParams[otherTagName] = { // these will be accessed by this.getTagText()
 					1: Morebits.pageNameNorm,
 					discuss: this.templateParams[params.mergeTag].discuss || ''
@@ -1227,11 +1227,11 @@ class ArticleMode extends TagMode {
 
 		// post at WP:PNT for {{not English}} and {{rough translation}} tag
 		if (params.translationPostAtPNT) {
-			var pntPage = new Twinkle.page('Wikipedia:Pages needing translation into English',
+			var pntPage = new Page('Wikipedia:Pages needing translation into English',
 				'Listing article at Wikipedia:Pages needing translation into English');
 			pntPage.setFollowRedirect(true);
-			promises.push(pntPage.load().then(function friendlytagCallbacksTranslationListPage(pageobj) {
-				var old_text = pageobj.getPageText();
+			promises.push(pntPage.load().then(function friendlytagCallbacksTranslationListPage() {
+				var old_text = pntPage.getPageText();
 
 				var template = params.tags.indexOf('Rough translation') !== -1 ? 'duflu' : 'needtrans';
 				var lang = params.translationLanguage;
@@ -1251,21 +1251,21 @@ class ArticleMode extends TagMode {
 				}
 
 				if (text === old_text) {
-					pageobj.getStatusElement().error('failed to find target spot for the discussion');
+					pntPage.getStatusElement().error('failed to find target spot for the discussion');
 					return;
 				}
-				pageobj.setPageText(text);
-				pageobj.setEditSummary(summary + ' [[:' + Morebits.pageNameNorm + ']]');
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setCreateOption('recreate');
-				return pageobj.save();
+				pntPage.setPageText(text);
+				pntPage.setEditSummary(summary + ' [[:' + Morebits.pageNameNorm + ']]');
+				pntPage.setChangeTags(Twinkle.changeTags);
+				pntPage.setCreateOption('recreate');
+				return pntPage.save();
 			}));
 		}
 
 		if (params.translationNotify) {
 			let statElem = new Morebits.status('Looking up creator');
 			pageobj.setStatusElement(statElem);
-			promises.push(pageobj.lookupCreation().then(function(pageobj) {
+			promises.push(pageobj.lookupCreation().then(function() {
 				var initialContrib = pageobj.getCreator();
 				statElem.info(`Found ${initialContrib}`);
 
@@ -1275,7 +1275,7 @@ class ArticleMode extends TagMode {
 					return;
 				}
 
-				var userTalkPage = new Twinkle.page('User talk:' + initialContrib,
+				var userTalkPage = new Page('User talk:' + initialContrib,
 					'Notifying initial contributor (' + initialContrib + ')');
 				userTalkPage.setNewSectionTitle('Your article [[' + Morebits.pageNameNorm + ']]');
 				userTalkPage.setNewSectionText('{{subst:uw-notenglish|1=' + Morebits.pageNameNorm +

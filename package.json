@@ -9,7 +9,14 @@
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"build": "grunt build",
-		"start": "webpack serve"
+		"quickbuild": "webpack",
+		"start": "webpack serve",
+		"test:prod": "webpack && jest",
+		"test": "env DEBUG=true webpack && jest -i",
+		"test:unit": "webpack && jest --selectProjects unit",
+		"test:integration": "webpack && jest --selectProjects integration",
+		"test:integration:setup": "cd tests/integration/docker && bash main.sh",
+		"test:integration:teardown": "cd tests/integration/docker && docker-compose down"
 	},
 	"dependencies": {
 		"@types/select2": "^4.0.53",
@@ -17,6 +24,7 @@
 		"twinkle-core": "^3.0.0"
 	},
 	"devDependencies": {
+		"@types/jest": "^26.0.20",
 		"@typescript-eslint/eslint-plugin": "^4.11.1",
 		"@typescript-eslint/parser": "^4.11.1",
 		"eslint": "^7.15.0",
@@ -26,13 +34,17 @@
 		"grunt-contrib-concat": "^1.0.1",
 		"grunt-replace": "^1.0.1",
 		"grunt-webpack": "^4.0.2",
+		"jest": "^26.6.3",
+		"jest-playwright-preset": "^1.4.7",
 		"mock-mediawiki": "^1.0.1",
+		"mwn": "^0.10.1",
+		"playwright": "^1.9.1",
 		"prettier": "^2.2.1",
+		"ts-jest": "^26.5.2",
 		"ts-loader": "^8.0.13",
 		"typescript": "^4.1.2",
 		"webpack": "^5.11.1",
 		"webpack-cli": "^4.3.1",
-		"webpack-concat-plugin": "^3.0.0",
 		"webpack-dev-server": "^3.11.1"
 	}
 }
