@@ -1,6 +1,6 @@
 import { Twinkle, Page, Api } from './core';
 import { addNs, arr_includes, makeTemplate, obj_entries, stripNs } from './utils';
-import { toTLACase, XfdCore as Xfd, XfdMode } from './core';
+import { toTLACase, XfdCore, XfdMode } from './core';
 import { makeFindSourcesDiv, hatnoteRegex } from './common';
 
 
@@ -1646,6 +1646,13 @@ class Rm extends XfdMode {
 }
 
 
-Xfd.modeList = [ Afd, Rfd, Cfd, Cfds, Tfd, Ffd, Mfd, Rm ];
+XfdCore.modeList = [ Afd, Rfd, Cfd, Cfds, Tfd, Ffd, Mfd, Rm ];
 
-export { Xfd };
+export class Xfd extends XfdCore {
+	footerlinks = {
+		'About deletion discussions': 'WP:XFD',
+		'XfD prefs': 'WP:TW/PREF#xfd',
+		'Twinkle help': 'WP:TW/DOC#xfd',
+		'Give feedback': 'WT:TW',
+	}
+}

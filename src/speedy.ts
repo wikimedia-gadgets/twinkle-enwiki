@@ -4,6 +4,12 @@ import { hatnoteRegex } from './common';
 
 export class Speedy extends SpeedyCore {
 
+	footerlinks = {
+		'Speedy deletion policy': 'WP:CSD',
+		'CSD prefs': 'WP:TW/PREF#speedy',
+		'Twinkle help': 'WP:TW/DOC#speedy',
+	}
+
 	preprocessParamInputs() {
 		let params = this.params; // shortcut reference
 		if (params.banned_user) {

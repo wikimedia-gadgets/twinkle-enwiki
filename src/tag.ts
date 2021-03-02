@@ -1417,8 +1417,6 @@ class FileMode extends TagMode {
 
 }
 
-
-
 // Override to change modes available,
 // each mode is a class extending TagMode
 TagCore.modeList = [
@@ -1427,4 +1425,10 @@ TagCore.modeList = [
 	FileMode
 ];
 
-export {TagCore as Tag};
+
+export class Tag extends TagCore {
+	footerlinks = {
+		'Twinkle help': 'WP:TW/DOC#tag'
+	}
+}
+
