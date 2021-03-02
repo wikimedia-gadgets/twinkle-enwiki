@@ -5,7 +5,11 @@ import { Xfd } from './xfd';
 import { Tag } from './tag';
 import { Speedy } from './speedy';
 import { Warn } from "./warn";
-import { DiffCore as Diff } from './core'; // no customisation; import directly from core
+import { Fluff } from './fluff';
+import { BatchDelete } from './batchdelete';
+
+// no customisation; import directly from core
+import { DiffCore as Diff } from './core';
 
 // Check if account is experienced enough to use Twinkle
 if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
@@ -23,7 +27,9 @@ Twinkle.registeredModules = [
 	Tag,
 	Speedy,
 	Diff,
-	Warn
+	Warn,
+	Fluff,
+	BatchDelete
 ];
 
 for (let module of Twinkle.registeredModules) {
