@@ -11,6 +11,13 @@ import { BatchDelete } from './batchdelete';
 // no customisation; import directly from core
 import { DiffCore as Diff } from './core';
 
+// Make jQuery Deferred exceptions hit the source map during debugging
+// XXX: there has to be a better way to do this ...
+// @ts-ignore
+if (typeof __webpack_exports__ !== 'undefined') {
+	jQuery.Deferred.exceptionHook = function (err) { throw err; };
+}
+
 // Check if account is experienced enough to use Twinkle
 if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
 	throw new Error('Twinkle: forbidden!');
