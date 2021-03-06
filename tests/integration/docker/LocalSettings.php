@@ -148,6 +148,8 @@ $wgShowExceptionDetails = true;
 $wgShowDBErrorBacktrace = true;
 $wgShowSQLErrors = true;
 
+$wgAllowUserJs = true;
+$wgAllowUserCss = true;
 $wgGroupPermissions['*']['managechangetags'] = true;
 
 wfLoadExtension( 'AbuseFilter' );
@@ -162,6 +164,17 @@ $wgGroupPermissions['sysop']['abusefilter-revert'] = true;
 wfLoadExtension( 'PageTriage' );
 
 wfLoadExtension( 'FlaggedRevs' );
+# see https://noc.wikimedia.org/conf/highlight.php?file=flaggedrevs.php
+$wgGroupPermissions['autoconfirmed']['movestable'] = true;
+$wgFlaggedRevsNamespaces = [ 0, 4 ];
+$wgFlaggedRevsTags = [
+    'status' => [ 'levels' => 1, 'quality' => 2, 'pristine' => 3 ],
+];
+$wgFlaggedRevsTagsRestrictions = [
+    'status' => [ 'review' => 1, 'autoreview' => 1 ],
+];
+$wgFlaggedRevsRestrictionLevels = [ '', 'autoconfirmed' ];
+$wgGroupPermissions['autoconfirmed']['autoreview'] = true;
 $wgGroupPermissions['sysop']['review'] = true;
 $wgGroupPermissions['sysop']['stablesettings'] = true;
 
