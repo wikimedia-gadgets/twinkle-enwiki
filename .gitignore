@@ -6,6 +6,7 @@ stash*.txt
 stash*.diff
 *.jsX
 *.js.map
+credentials.json
 
 # Windows
 Thumbs.db
