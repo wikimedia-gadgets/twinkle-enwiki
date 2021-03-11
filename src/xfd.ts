@@ -3,7 +3,6 @@ import { addNs, arr_includes, makeTemplate, obj_entries, stripNs } from './utils
 import { toTLACase, XfdCore, XfdMode } from './core';
 import { makeFindSourcesDiv, hatnoteRegex } from './common';
 
-
 class Afd extends XfdMode {
 	static venueCode = 'afd';
 	static venueLabel = 'AfD (Articles for deletion)';
@@ -35,7 +34,7 @@ class Afd extends XfdMode {
 		this.fieldset.append({
 			type: 'div',
 			label: makeFindSourcesDiv(),
-			style: 'margin-bottom: 5px;'
+			style: 'margin-bottom: 5px;',
 		});
 
 		this.fieldset.append({
@@ -45,9 +44,10 @@ class Afd extends XfdMode {
 					label: 'Wrap deletion tag with <noinclude>',
 					value: 'noinclude',
 					name: 'noinclude',
-					tooltip: 'Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won\'t transclude. This option is not normally required.'
-				}
-			]
+					tooltip:
+						"Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won't transclude. This option is not normally required.",
+				},
+			],
 		});
 		this.fieldset.append({
 			type: 'select',
@@ -65,41 +65,350 @@ class Afd extends XfdMode {
 				{ type: 'option', label: 'Fiction and the arts', value: 'F' },
 				{ type: 'option', label: 'Places and transportation', value: 'P' },
 				{ type: 'option', label: 'Indiscernible or unclassifiable topic', value: 'I' },
-				{ type: 'option', label: 'Debate not yet sorted', value: 'U' }
-			]
+				{ type: 'option', label: 'Debate not yet sorted', value: 'U' },
+			],
 		});
 
 		// delsort categories taken from [[WP:DS/C]], inspired by off [[User:Enterprisey/delsort.js]]
 		var delsortCategories = {
-			'People': ['People', 'Academics and educators', 'Actors and filmmakers', 'Artists', 'Authors', 'Bands and musicians', 'Businesspeople', 'Politicians', 'Sportspeople', 'Women', 'Lists of people'],
+			'People': [
+				'People',
+				'Academics and educators',
+				'Actors and filmmakers',
+				'Artists',
+				'Authors',
+				'Bands and musicians',
+				'Businesspeople',
+				'Politicians',
+				'Sportspeople',
+				'Women',
+				'Lists of people',
+			],
 			'Arts': ['Arts', 'Fictional elements', 'Science fiction and fantasy'],
 			'Arts/Culinary': ['Food and drink', 'Wine'],
-			'Arts/Language': ['Language', 'Academic journals', 'Bibliographies', 'Journalism', 'Literature', 'Logic', 'News media', 'Philosophy', 'Poetry'],
-			'Arts/Performing': ['Albums and songs', 'Dance', 'Film', 'Magic', 'Music', 'Radio', 'Television', 'Theatre', 'Video games'],
+			'Arts/Language': [
+				'Language',
+				'Academic journals',
+				'Bibliographies',
+				'Journalism',
+				'Literature',
+				'Logic',
+				'News media',
+				'Philosophy',
+				'Poetry',
+			],
+			'Arts/Performing': [
+				'Albums and songs',
+				'Dance',
+				'Film',
+				'Magic',
+				'Music',
+				'Radio',
+				'Television',
+				'Theatre',
+				'Video games',
+			],
 			'Arts/Visual arts': ['Visual arts', 'Architecture', 'Fashion', 'Photography'],
 			'Arts/Comics and animation': ['Comics and animation', 'Anime and manga', 'Webcomics'],
 			'Places of interest': ['Museums and libraries', 'Shopping malls'],
-			'Topical': ['Animal', 'Bilateral relations', 'Conservatism', 'Conspiracy theories', 'Crime', 'Disability', 'Discrimination', 'Entertainment', 'Ethnic groups', 'Events', 'Finance', 'Games', 'Health and fitness', 'History', 'Law', 'Military', 'Organizations', 'Paranormal', 'Piracy', 'Politics', 'Terrorism'],
+			'Topical': [
+				'Animal',
+				'Bilateral relations',
+				'Conservatism',
+				'Conspiracy theories',
+				'Crime',
+				'Disability',
+				'Discrimination',
+				'Entertainment',
+				'Ethnic groups',
+				'Events',
+				'Finance',
+				'Games',
+				'Health and fitness',
+				'History',
+				'Law',
+				'Military',
+				'Organizations',
+				'Paranormal',
+				'Piracy',
+				'Politics',
+				'Terrorism',
+			],
 			'Topical/Business': ['Business', 'Advertising', 'Companies', 'Management', 'Products'],
 			'Topical/Culture': ['Beauty pageants', 'Fashion', 'Mythology', 'Popular culture', 'Sexuality and gender'],
 			'Topical/Education': ['Education', 'Fraternities and sororities', 'Schools'],
-			'Topical/Religion': ['Religion', 'Atheism', 'Bible', 'Buddhism', 'Christianity', 'Islam', 'Judaism', 'Hinduism', 'Paganism', 'Sikhism', 'Spirituality'],
-			'Topical/Science': ['Science', 'Archaeology', 'Astronomy', 'Behavioural science', 'Biology', 'Economics', 'Engineering', 'Environment', 'Geography', 'Mathematics', 'Medicine', 'Organisms', 'Psychiatry', 'Psychology', 'Social science'],
-			'Topical/Sports': ['Sports', 'American football', 'Baseball', 'Basketball', 'Bodybuilding', 'Boxing', 'Cricket', 'Cycling', 'Football', 'Golf', 'Handball', 'Horse racing', 'Ice hockey', 'Motorsport', 'Rugby union', 'Softball', 'Martial arts', 'Wrestling'],
-			'Topical/Technology': ['Technology', 'Aviation', 'Computing', 'Firearms', 'Internet', 'Software', 'Transportation', 'Websites'],
+			'Topical/Religion': [
+				'Religion',
+				'Atheism',
+				'Bible',
+				'Buddhism',
+				'Christianity',
+				'Islam',
+				'Judaism',
+				'Hinduism',
+				'Paganism',
+				'Sikhism',
+				'Spirituality',
+			],
+			'Topical/Science': [
+				'Science',
+				'Archaeology',
+				'Astronomy',
+				'Behavioural science',
+				'Biology',
+				'Economics',
+				'Engineering',
+				'Environment',
+				'Geography',
+				'Mathematics',
+				'Medicine',
+				'Organisms',
+				'Psychiatry',
+				'Psychology',
+				'Social science',
+			],
+			'Topical/Sports': [
+				'Sports',
+				'American football',
+				'Baseball',
+				'Basketball',
+				'Bodybuilding',
+				'Boxing',
+				'Cricket',
+				'Cycling',
+				'Football',
+				'Golf',
+				'Handball',
+				'Horse racing',
+				'Ice hockey',
+				'Motorsport',
+				'Rugby union',
+				'Softball',
+				'Martial arts',
+				'Wrestling',
+			],
+			'Topical/Technology': [
+				'Technology',
+				'Aviation',
+				'Computing',
+				'Firearms',
+				'Internet',
+				'Software',
+				'Transportation',
+				'Websites',
+			],
 			'Wikipedia page type': ['Disambiguations', 'Lists'],
-			'Geographic/Africa': ['Africa', 'Algeria', 'Democratic Republic of the Congo', 'Egypt', 'Ethiopia', 'Ghana', 'Kenya', 'Libya', 'Mauritius', 'Morocco', 'Nigeria', 'Somalia', 'South Africa', 'Zimbabwe'],
-			'Geographic/Asia': ['Asia', 'Afghanistan', 'Bangladesh', 'Brunei', 'Cambodia', 'China', 'Hong Kong', 'Indonesia', 'Japan', 'Korea', 'Laos', 'Malaysia', 'Maldives', 'Mongolia', 'Myanmar', 'Nepal', 'Pakistan', 'Philippines', 'Singapore', 'South Korea', 'Sri Lanka', 'Taiwan', 'Thailand', 'Vietnam'],
-			'Geographic/Asia/Central Asia': ['Central Asia', 'Kazakhstan', 'Kyrgyzstan', 'Tajikistan', 'Turkmenistan', 'Uzbekistan'],
-			'Geographic/Asia/Middle East': ['Middle East', 'Bahrain', 'Iran', 'Iraq', 'Israel', 'Jordan', 'Kuwait', 'Lebanon', 'Libya', 'Palestine', 'Qatar', 'Saudi Arabia', 'Syria', 'United Arab Emirates', 'Yemen'],
+			'Geographic/Africa': [
+				'Africa',
+				'Algeria',
+				'Democratic Republic of the Congo',
+				'Egypt',
+				'Ethiopia',
+				'Ghana',
+				'Kenya',
+				'Libya',
+				'Mauritius',
+				'Morocco',
+				'Nigeria',
+				'Somalia',
+				'South Africa',
+				'Zimbabwe',
+			],
+			'Geographic/Asia': [
+				'Asia',
+				'Afghanistan',
+				'Bangladesh',
+				'Brunei',
+				'Cambodia',
+				'China',
+				'Hong Kong',
+				'Indonesia',
+				'Japan',
+				'Korea',
+				'Laos',
+				'Malaysia',
+				'Maldives',
+				'Mongolia',
+				'Myanmar',
+				'Nepal',
+				'Pakistan',
+				'Philippines',
+				'Singapore',
+				'South Korea',
+				'Sri Lanka',
+				'Taiwan',
+				'Thailand',
+				'Vietnam',
+			],
+			'Geographic/Asia/Central Asia': [
+				'Central Asia',
+				'Kazakhstan',
+				'Kyrgyzstan',
+				'Tajikistan',
+				'Turkmenistan',
+				'Uzbekistan',
+			],
+			'Geographic/Asia/Middle East': [
+				'Middle East',
+				'Bahrain',
+				'Iran',
+				'Iraq',
+				'Israel',
+				'Jordan',
+				'Kuwait',
+				'Lebanon',
+				'Libya',
+				'Palestine',
+				'Qatar',
+				'Saudi Arabia',
+				'Syria',
+				'United Arab Emirates',
+				'Yemen',
+			],
 			'Geographic/Asia/India': ['India', 'Kerala'],
-			'Geographic/Europe': ['Europe', 'Albania', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia (country)', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy', 'Jersey', 'Kosovo', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Moldova', 'Montenegro', 'Netherlands', 'North Macedonia', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'Yugoslavia'],
+			'Geographic/Europe': [
+				'Europe',
+				'Albania',
+				'Armenia',
+				'Austria',
+				'Azerbaijan',
+				'Belarus',
+				'Belgium',
+				'Bosnia and Herzegovina',
+				'Bulgaria',
+				'Croatia',
+				'Cyprus',
+				'Czech Republic',
+				'Denmark',
+				'Estonia',
+				'Finland',
+				'France',
+				'Georgia (country)',
+				'Germany',
+				'Greece',
+				'Hungary',
+				'Iceland',
+				'Ireland',
+				'Italy',
+				'Jersey',
+				'Kosovo',
+				'Latvia',
+				'Lithuania',
+				'Luxembourg',
+				'Malta',
+				'Moldova',
+				'Montenegro',
+				'Netherlands',
+				'North Macedonia',
+				'Norway',
+				'Poland',
+				'Portugal',
+				'Romania',
+				'Russia',
+				'Serbia',
+				'Slovakia',
+				'Slovenia',
+				'Spain',
+				'Sweden',
+				'Switzerland',
+				'Turkey',
+				'Ukraine',
+				'Yugoslavia',
+			],
 			'Geographic/Europe/United Kingdom': ['United Kingdom', 'England', 'Northern Ireland', 'Scotland', 'Wales'],
 			'Geographic/Oceania': ['Oceania', 'Antarctica', 'Australia', 'New Zealand'],
-			'Geographic/Americas/Canada': ['Canada', 'Alberta', 'British Columbia', 'Manitoba', 'Nova Scotia', 'Ontario', 'Quebec'],
-			'Geographic/Americas/Latin America': ['Latin America', 'Caribbean', 'South America', 'Argentina', 'Barbados', 'Belize', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Costa Rica', 'Cuba', 'Ecuador', 'El Salvador', 'Grenada', 'Guatemala', 'Haiti', 'Mexico', 'Nicaragua', 'Panama', 'Paraguay', 'Peru', 'Puerto Rico', 'Trinidad and Tobago', 'Uruguay', 'Venezuela'],
-			'Geographic/Americas/USA': ['United States of America', 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia (U.S. state)', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'Washington, D.C.', 'West Virginia', 'Wisconsin', 'Wyoming'],
-			'Geographic/Unsorted': ['Islands']
+			'Geographic/Americas/Canada': [
+				'Canada',
+				'Alberta',
+				'British Columbia',
+				'Manitoba',
+				'Nova Scotia',
+				'Ontario',
+				'Quebec',
+			],
+			'Geographic/Americas/Latin America': [
+				'Latin America',
+				'Caribbean',
+				'South America',
+				'Argentina',
+				'Barbados',
+				'Belize',
+				'Bolivia',
+				'Brazil',
+				'Chile',
+				'Colombia',
+				'Costa Rica',
+				'Cuba',
+				'Ecuador',
+				'El Salvador',
+				'Grenada',
+				'Guatemala',
+				'Haiti',
+				'Mexico',
+				'Nicaragua',
+				'Panama',
+				'Paraguay',
+				'Peru',
+				'Puerto Rico',
+				'Trinidad and Tobago',
+				'Uruguay',
+				'Venezuela',
+			],
+			'Geographic/Americas/USA': [
+				'United States of America',
+				'Alabama',
+				'Alaska',
+				'Arizona',
+				'Arkansas',
+				'California',
+				'Colorado',
+				'Connecticut',
+				'Delaware',
+				'Florida',
+				'Georgia (U.S. state)',
+				'Hawaii',
+				'Idaho',
+				'Illinois',
+				'Indiana',
+				'Iowa',
+				'Kansas',
+				'Kentucky',
+				'Louisiana',
+				'Maine',
+				'Maryland',
+				'Massachusetts',
+				'Michigan',
+				'Minnesota',
+				'Mississippi',
+				'Missouri',
+				'Montana',
+				'Nebraska',
+				'Nevada',
+				'New Hampshire',
+				'New Jersey',
+				'New Mexico',
+				'New York',
+				'North Carolina',
+				'North Dakota',
+				'Ohio',
+				'Oklahoma',
+				'Oregon',
+				'Pennsylvania',
+				'Rhode Island',
+				'South Carolina',
+				'South Dakota',
+				'Tennessee',
+				'Texas',
+				'Utah',
+				'Vermont',
+				'Virginia',
+				'Washington',
+				'Washington, D.C.',
+				'West Virginia',
+				'Wisconsin',
+				'Wyoming',
+			],
+			'Geographic/Unsorted': ['Islands'],
 		};
 
 		var delsort = this.fieldset.append({
@@ -107,12 +416,13 @@ class Afd extends XfdMode {
 			multiple: true,
 			name: 'delsortCats',
 			label: 'Choose deletion sorting categories: ',
-			tooltip: 'Select a few categories that are specifically relevant to the subject of the article. Be as precise as possible; categories like People and USA should only be used when no other categories apply.'
+			tooltip:
+				'Select a few categories that are specifically relevant to the subject of the article. Be as precise as possible; categories like People and USA should only be used when no other categories apply.',
 		});
 
-		$.each(delsortCategories, function(groupname, list) {
+		$.each(delsortCategories, function (groupname, list) {
 			var group = delsort.append({ type: 'optgroup', label: groupname });
-			list.forEach(function(item) {
+			list.forEach(function (item) {
 				group.append({ type: 'option', label: item, value: item });
 			});
 		});
@@ -122,7 +432,8 @@ class Afd extends XfdMode {
 	}
 
 	postRender(renderedFieldset: HTMLFieldSetElement) {
-		$(renderedFieldset).find('[name=delsortCats]')
+		$(renderedFieldset)
+			.find('[name=delsortCats]')
 			.attr('data-placeholder', 'Select delsort pages')
 			.select2({
 				width: '100%',
@@ -131,31 +442,30 @@ class Afd extends XfdMode {
 				language: {
 					// This actually works but apparently the type is wrong
 					// @ts-ignore
-					searching: Morebits.select2.queryInterceptor
+					searching: Morebits.select2.queryInterceptor,
 				},
 				// Link text to the page itself
-				templateSelection: function(choice) {
-					return $('<a>').text(choice.text).attr({
-						href: mw.util.getUrl('Wikipedia:WikiProject_Deletion_sorting/' + choice.text),
-						target: '_blank'
-					});
-				}
+				templateSelection: function (choice) {
+					return $('<a>')
+						.text(choice.text)
+						.attr({
+							href: mw.util.getUrl('Wikipedia:WikiProject_Deletion_sorting/' + choice.text),
+							target: '_blank',
+						});
+				},
 			});
 
 		mw.util.addCSS(
 			// Remove black border
 			'.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
-
-			// Reduce padding
-			'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }' +
-			'.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } ' +
-
-			// Adjust font size
-			'.select2-container .select2-dropdown .select2-results { font-size: 13px; }' +
-			'.select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
-
-			// Make the tiny cross larger
-			'.select2-selection__choice__remove { font-size: 130%; }'
+				// Reduce padding
+				'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }' +
+				'.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } ' +
+				// Adjust font size
+				'.select2-container .select2-dropdown .select2-results { font-size: 13px; }' +
+				'.select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
+				// Make the tiny cross larger
+				'.select2-selection__choice__remove { font-size: 130%; }'
 		);
 	}
 
@@ -184,9 +494,8 @@ class Afd extends XfdMode {
 	 * Check to see that the page still exists, is not already tagged for AfD, etc.
 	 */
 	checkPage() {
-
 		var pageobj = new Page(mw.config.get('wgPageName'), 'Adding deletion tag to article');
-		pageobj.setFollowRedirect(true);  // should never be needed, but if the article is moved, we would want to follow the redirect
+		pageobj.setFollowRedirect(true); // should never be needed, but if the article is moved, we would want to follow the redirect
 		return pageobj.load().then(() => {
 			var text = pageobj.getPageText();
 			var statelem = pageobj.getStatusElement();
@@ -199,9 +508,16 @@ class Afd extends XfdMode {
 			}
 
 			// Check for existing AfD tag, for the benefit of new page patrollers
-			var textNoAfd = text.replace(/<!--.*AfD.*\n\{\{(?:Article for deletion\/dated|AfDM).*\}\}\n<!--.*(?:\n<!--.*)?AfD.*(?:\s*\n)?/g, '');
+			var textNoAfd = text.replace(
+				/<!--.*AfD.*\n\{\{(?:Article for deletion\/dated|AfDM).*\}\}\n<!--.*(?:\n<!--.*)?AfD.*(?:\s*\n)?/g,
+				''
+			);
 			if (text !== textNoAfd) {
-				if (confirm('An AfD tag was found on this article. Maybe someone beat you to it.  \nClick OK to replace the current AfD tag (not recommended), or Cancel to abandon your nomination.')) {
+				if (
+					confirm(
+						'An AfD tag was found on this article. Maybe someone beat you to it.  \nClick OK to replace the current AfD tag (not recommended), or Cancel to abandon your nomination.'
+					)
+				) {
 					pageobj.setPageText(textNoAfd);
 				} else {
 					statelem.error('Article already tagged with AfD tag, and you chose to abort');
@@ -211,22 +527,29 @@ class Afd extends XfdMode {
 			}
 			return pageobj;
 		});
-
 	}
 
 	tagPage(pageobj) {
 		let params = this.params;
 
-		params.tagText = (params.noinclude ? '<noinclude>{{' : '{{') + (params.number === '' ? 'subst:afd|help=off' : 'subst:afdx|' +
-			params.number + '|help=off') + (params.noinclude ? '}}</noinclude>\n' : '}}\n');
+		params.tagText =
+			(params.noinclude ? '<noinclude>{{' : '{{') +
+			(params.number === '' ? 'subst:afd|help=off' : 'subst:afdx|' + params.number + '|help=off') +
+			(params.noinclude ? '}}</noinclude>\n' : '}}\n');
 
 		if (pageobj.canEdit()) {
 			var text = pageobj.getPageText();
 
 			// Remove some tags that should always be removed on AfD.
-			text = text.replace(/\{\{\s*(dated prod|dated prod blp|Prod blp\/dated|Proposed deletion\/dated|prod2|Proposed deletion endorsed|Userspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
+			text = text.replace(
+				/\{\{\s*(dated prod|dated prod blp|Prod blp\/dated|Proposed deletion\/dated|prod2|Proposed deletion endorsed|Userspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
+				''
+			);
 			// Then, test if there are speedy deletion-related templates on the article.
-			var textNoSd = text.replace(/\{\{\s*(db(-\w*)?|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
+			var textNoSd = text.replace(
+				/\{\{\s*(db(-\w*)?|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
+				''
+			);
 			if (text !== textNoSd && confirm('A speedy deletion tag was found on this page. Should it be removed?')) {
 				text = textNoSd;
 			}
@@ -243,18 +566,22 @@ class Afd extends XfdMode {
 		} else {
 			return this.autoEditRequest(pageobj);
 		}
-
 	}
 
 	getDiscussionWikitext(): string {
 		let params = this.params;
-		return makeTemplate('subst:afd2', {
-			text: Morebits.string.formatReasonText(params.reason, true),
-			pg: Morebits.pageNameNorm,
-			cat: params.xfdcat
-		}) + params.delsortCats.map(function (cat) {
-			return '\n{{subst:delsort|' + cat + '|~~~~}}';
-		}).join('');
+		return (
+			makeTemplate('subst:afd2', {
+				text: Morebits.string.formatReasonText(params.reason, true),
+				pg: Morebits.pageNameNorm,
+				cat: params.xfdcat,
+			}) +
+			params.delsortCats
+				.map(function (cat) {
+					return '\n{{subst:delsort|' + cat + '|~~~~}}';
+				})
+				.join('')
+		);
 	}
 
 	createDiscussionPage() {
@@ -267,15 +594,16 @@ class Afd extends XfdMode {
 			pageobj.setCreateOption('createonly');
 			return pageobj.save();
 		});
-
 	}
 
 	addToList() {
 		let params = this.params;
 
 		var date = new Morebits.date(params.articleLoadTime);
-		var pageobj = new Page('Wikipedia:Articles for deletion/Log/' +
-			date.format('YYYY MMMM D', 'utc'), "Adding discussion to today's list");
+		var pageobj = new Page(
+			'Wikipedia:Articles for deletion/Log/' + date.format('YYYY MMMM D', 'utc'),
+			"Adding discussion to today's list"
+		);
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then(() => {
 			var statelem = pageobj.getStatusElement();
@@ -287,14 +615,18 @@ class Afd extends XfdMode {
 			if (!pageobj.exists()) {
 				text = '{{subst:AfD log}}\n' + added_data;
 			} else {
-				var old_text = pageobj.getPageText() + '\n';  // MW strips trailing blanks, but we like them, so we add a fake one
+				var old_text = pageobj.getPageText() + '\n'; // MW strips trailing blanks, but we like them, so we add a fake one
 
 				text = old_text.replace(/(<!-- Add new entries to the TOP of the following list -->\n+)/, '$1' + added_data);
 				if (text === old_text) {
 					var linknode = document.createElement('a');
 					linknode.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/Fixing AFD') + '?action=purge');
 					linknode.appendChild(document.createTextNode('How to fix AFD'));
-					statelem.error([ 'Could not find the target spot for the discussion. To fix this problem, please see ', linknode, '.' ]);
+					statelem.error([
+						'Could not find the target spot for the discussion. To fix this problem, please see ',
+						linknode,
+						'.',
+					]);
 					return $.Deferred().reject();
 				}
 			}
@@ -305,22 +637,26 @@ class Afd extends XfdMode {
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
-
 	}
 
 	addToDelsortLists() {
 		let params = this.params;
 		let promises = params.delsortCats.map((cat, idx) => {
-			var delsortPage = new Page('Wikipedia:WikiProject Deletion sorting/' + cat, 'Adding to list of ' + cat + '-related deletion discussions');
+			var delsortPage = new Page(
+				'Wikipedia:WikiProject Deletion sorting/' + cat,
+				'Adding to list of ' + cat + '-related deletion discussions'
+			);
 			delsortPage.setFollowRedirect(true); // In case a category gets renamed
 			return delsortPage.load().then(() => {
 				var discussionPage = params.discussionpage;
-				var text = delsortPage.getPageText().replace('directly below this line -->', 'directly below this line -->\n{{' + discussionPage + '}}');
+				var text = delsortPage
+					.getPageText()
+					.replace('directly below this line -->', 'directly below this line -->\n{{' + discussionPage + '}}');
 				delsortPage.setPageText(text);
 				delsortPage.setEditSummary('Listing [[:' + discussionPage + ']].');
 
 				delsortPage.setCreateOption('nocreate');
-				return delsortPage.save().catch(function() {}); // failures aren't important
+				return delsortPage.save().catch(function () {}); // failures aren't important
 			});
 		});
 
@@ -335,14 +671,14 @@ class Afd extends XfdMode {
 	}
 
 	getNotifyText(): string {
-		return makeTemplate('subst:afd notice', {
-			1: Morebits.pageNameNorm,
-			order: this.params.numbering ? `|order=&#32;${this.params.numbering}` : ''
-		}) + ' ~~~~';
+		return (
+			makeTemplate('subst:afd notice', {
+				1: Morebits.pageNameNorm,
+				order: this.params.numbering ? `|order=&#32;${this.params.numbering}` : '',
+			}) + ' ~~~~'
+		);
 	}
-
 }
-
 
 class Tfd extends XfdMode {
 	static venueCode = 'tfd';
@@ -357,7 +693,7 @@ class Tfd extends XfdMode {
 	}
 
 	static isDefaultChoice() {
-		return [ 10, 828 ].indexOf(mw.config.get('wgNamespaceNumber')) !== -1;
+		return [10, 828].indexOf(mw.config.get('wgNamespaceNumber')) !== -1;
 	}
 
 	generateFieldset(): Morebits.quickForm.element {
@@ -367,7 +703,7 @@ class Tfd extends XfdMode {
 			type: 'select',
 			label: 'Choose type of action wanted: ',
 			name: 'xfdcat',
-			event: function(e) {
+			event: function (e) {
 				var target = e.target,
 					tfdtarget = target.form.tfdtarget;
 				// add/remove extra input box
@@ -376,8 +712,11 @@ class Tfd extends XfdMode {
 						name: 'tfdtarget',
 						type: 'input',
 						label: 'Other ' + templateOrModule + ' to be merged: ',
-						tooltip: 'Required. Should not include the ' + Morebits.string.toUpperCaseFirstChar(templateOrModule) + ': namespace prefix.',
-						required: true
+						tooltip:
+							'Required. Should not include the ' +
+							Morebits.string.toUpperCaseFirstChar(templateOrModule) +
+							': namespace prefix.',
+						required: true,
 					});
 					target.parentNode.appendChild(tfdtarget.render());
 				} else {
@@ -387,22 +726,28 @@ class Tfd extends XfdMode {
 			},
 			list: [
 				{ type: 'option', label: 'Deletion', value: 'tfd', selected: true },
-				{ type: 'option', label: 'Merge', value: 'tfm' }
-			]
+				{ type: 'option', label: 'Merge', value: 'tfm' },
+			],
 		});
 		this.fieldset.append({
 			type: 'select',
 			name: 'templatetype',
 			label: 'Deletion tag display style: ',
 			tooltip: 'Which <code>type=</code> parameter to pass to the TfD tag template.',
-			list: templateOrModule === 'module' ? [
-				{ type: 'option', value: 'module', label: 'Module', selected: true }
-			] : [
-				{ type: 'option', value: 'standard', label: 'Standard', selected: true },
-				{ type: 'option', value: 'sidebar', label: 'Sidebar/infobox', selected: !!$('.infobox').length },
-				{ type: 'option', value: 'inline', label: 'Inline template', selected: !!$('.mw-parser-output > p .Inline-Template').length },
-				{ type: 'option', value: 'tiny', label: 'Tiny inline' }
-			]
+			list:
+				templateOrModule === 'module'
+					? [{ type: 'option', value: 'module', label: 'Module', selected: true }]
+					: [
+							{ type: 'option', value: 'standard', label: 'Standard', selected: true },
+							{ type: 'option', value: 'sidebar', label: 'Sidebar/infobox', selected: !!$('.infobox').length },
+							{
+								type: 'option',
+								value: 'inline',
+								label: 'Inline template',
+								selected: !!$('.mw-parser-output > p .Inline-Template').length,
+							},
+							{ type: 'option', value: 'tiny', label: 'Tiny inline' },
+					  ],
 		});
 
 		this.fieldset.append({
@@ -412,11 +757,12 @@ class Tfd extends XfdMode {
 					label: 'Wrap deletion tag with <noinclude> (for substituted templates only)',
 					value: 'noinclude',
 					name: 'noinclude',
-					tooltip: 'Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won\'t get substituted along with the template.',
+					tooltip:
+						"Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won't get substituted along with the template.",
 					disabled: templateOrModule === 'module',
-					checked: !!$('.box-Subst_only').length // Default to checked if page carries {{subst only}}
-				}
-			]
+					checked: !!$('.box-Subst_only').length, // Default to checked if page carries {{subst only}}
+				},
+			],
 		});
 
 		this.fieldset.append({
@@ -427,9 +773,9 @@ class Tfd extends XfdMode {
 					value: 'devpages',
 					name: 'devpages',
 					tooltip: 'A notification template will be sent to Twinkle, AWB, and RedWarn if this is true.',
-					checked: true
-				}
-			]
+					checked: true,
+				},
+			],
 		});
 
 		this.appendReasonArea();
@@ -458,7 +804,6 @@ class Tfd extends XfdMode {
 		this.tm.add(this.notifyDevs, [this.addToList]);
 		this.tm.add(this.addToLog, [this.notifyCreator]);
 		this.tm.execute().then(() => this.redirectToDiscussion());
-
 	}
 
 	tagPage() {
@@ -474,16 +819,20 @@ class Tfd extends XfdMode {
 
 	tagPageForDeletion() {
 		let params = this.params;
-		let pageobj = new Page(Morebits.pageNameNorm + (params.scribunto ? '/doc' : ''),
-			'Tagging ' + (params.scribunto ? 'module documentation' : 'template') + ' with ' +
-			'deletion tag');
-		pageobj.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
+		let pageobj = new Page(
+			Morebits.pageNameNorm + (params.scribunto ? '/doc' : ''),
+			'Tagging ' + (params.scribunto ? 'module documentation' : 'template') + ' with ' + 'deletion tag'
+		);
+		pageobj.setFollowRedirect(true); // should never be needed, but if the page is moved, we would want to follow the redirect
 
 		return pageobj.load().then(() => {
 			this.setLogPageAndDiscussionPage(pageobj.getLoadTime());
 			var text = pageobj.getPageText();
 
-			params.tagText = '{{subst:template for discussion|help=off' + (params.templatetype !== 'standard' ? '|type=' + params.templatetype : '') + '}}';
+			params.tagText =
+				'{{subst:template for discussion|help=off' +
+				(params.templatetype !== 'standard' ? '|type=' + params.templatetype : '') +
+				'}}';
 
 			if (pageobj.getContentModel() === 'sanitized-css') {
 				params.tagText = '/* ' + params.tagText + ' */';
@@ -507,7 +856,6 @@ class Tfd extends XfdMode {
 				return this.autoEditRequest(pageobj);
 			}
 		});
-
 	}
 
 	tagPagesForMerge() {
@@ -516,24 +864,28 @@ class Tfd extends XfdMode {
 		let docOrNot = params.scribunto ? '/doc' : '';
 		let moduleDocOrTemplate = params.scribunto ? 'module documentation' : 'template';
 
-		let pageobj = new Page(`${Morebits.pageNameNorm}${docOrNot}`,
-			`Tagging ${moduleDocOrTemplate} with merge tag`);
-		pageobj.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
+		let pageobj = new Page(`${Morebits.pageNameNorm}${docOrNot}`, `Tagging ${moduleDocOrTemplate} with merge tag`);
+		pageobj.setFollowRedirect(true); // should never be needed, but if the page is moved, we would want to follow the redirect
 
 		let thispageTagging = pageobj.load().then(() => {
 			this.setLogPageAndDiscussionPage(pageobj.getLoadTime());
 			return this.tagForMerge(pageobj, this.params);
 		});
 
-		let otherpageobj = new Page(`${params.otherTemplateName}${docOrNot}`,
-			`Tagging other ${moduleDocOrTemplate} with merge tag`);
+		let otherpageobj = new Page(
+			`${params.otherTemplateName}${docOrNot}`,
+			`Tagging other ${moduleDocOrTemplate} with merge tag`
+		);
 		otherpageobj.setFollowRedirect(true);
 
 		let otherpageTagging = otherpageobj.load().then(() => {
 			this.setLogPageAndDiscussionPage(pageobj.getLoadTime());
-			return this.tagForMerge(otherpageobj, $.extend({}, params, {
-				otherTemplateName: Morebits.pageNameNorm
-			}));
+			return this.tagForMerge(
+				otherpageobj,
+				$.extend({}, params, {
+					otherTemplateName: Morebits.pageNameNorm,
+				})
+			);
 		});
 
 		return $.when(thispageTagging, otherpageTagging);
@@ -545,11 +897,14 @@ class Tfd extends XfdMode {
 	 * that would be incorrect when tagging the "other" page
 	 */
 	tagForMerge(pageobj, params) {
-
 		var text = pageobj.getPageText();
 
-		params.tagText = '{{subst:tfm|help=off|' + (params.templatetype !== 'standard' ? 'type=' + params.templatetype + '|' : '') +
-			'1=' + params.otherTemplateName.replace(/^(?:Template|Module):/, '') + '}}';
+		params.tagText =
+			'{{subst:tfm|help=off|' +
+			(params.templatetype !== 'standard' ? 'type=' + params.templatetype + '|' : '') +
+			'1=' +
+			params.otherTemplateName.replace(/^(?:Template|Module):/, '') +
+			'}}';
 
 		if (pageobj.getContentModel() === 'sanitized-css') {
 			params.tagText = '/* ' + params.tagText + ' */';
@@ -564,7 +919,9 @@ class Tfd extends XfdMode {
 
 		if (pageobj.canEdit() && ['wikitext', 'sanitized-css'].indexOf(pageobj.getContentModel()) !== -1) {
 			pageobj.setPageText(params.tagText + text);
-			pageobj.setEditSummary('Listed for merging with [[:' + params.otherTemplateName + ']]; see [[:' + params.discussionpage + ']].');
+			pageobj.setEditSummary(
+				'Listed for merging with [[:' + params.otherTemplateName + ']]; see [[:' + params.discussionpage + ']].'
+			);
 
 			pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
 			if (params.scribunto) {
@@ -574,7 +931,6 @@ class Tfd extends XfdMode {
 		} else {
 			return this.autoEditRequest(pageobj);
 		}
-
 	}
 
 	addToList() {
@@ -602,13 +958,18 @@ class Tfd extends XfdMode {
 			}
 
 			pageobj.setPageText(text);
-			pageobj.setEditSummary('Adding ' + (params.xfdcat === 'tfd' ? 'deletion nomination' : 'merge listing') + ' of [[:' + Morebits.pageNameNorm + ']].');
+			pageobj.setEditSummary(
+				'Adding ' +
+					(params.xfdcat === 'tfd' ? 'deletion nomination' : 'merge listing') +
+					' of [[:' +
+					Morebits.pageNameNorm +
+					']].'
+			);
 
 			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
-
 	}
 
 	notifyOtherCreator() {
@@ -624,7 +985,6 @@ class Tfd extends XfdMode {
 			}
 			return this.notifyTalkPage(otherpagecreator);
 		});
-
 	}
 
 	notifyDevs() {
@@ -635,14 +995,19 @@ class Tfd extends XfdMode {
 		var categoryNotificationPageMap = {
 			'Templates used by Twinkle': 'Wikipedia talk:Twinkle',
 			'Templates used by AutoWikiBrowser': 'Wikipedia talk:AutoWikiBrowser',
-			'Templates used by RedWarn': 'Wikipedia talk:RedWarn'
+			'Templates used by RedWarn': 'Wikipedia talk:RedWarn',
 		};
 
-		return $.when.apply($, obj_entries(categoryNotificationPageMap).filter(([cat, page]) => {
-			return arr_includes(inCategories, cat);
-		}).map(([cat, page]) => {
-			return this.notifyTalkPage(page, new Morebits.status('Notifying ' + page + ' of template nomination'));
-		}));
+		return $.when.apply(
+			$,
+			obj_entries(categoryNotificationPageMap)
+				.filter(([cat, page]) => {
+					return arr_includes(inCategories, cat);
+				})
+				.map(([cat, page]) => {
+					return this.notifyTalkPage(page, new Morebits.status('Notifying ' + page + ' of template nomination'));
+				})
+		);
 	}
 
 	watchModule() {
@@ -655,18 +1020,19 @@ class Tfd extends XfdMode {
 		// preferences (T262912), so we do it manually.
 		// The watchdefault pref appears to reliably return '1' (string),
 		// but that's not consistent among prefs so might as well be "correct"
-		var watchModule = watchPref !== 'no' && (watchPref !== 'default' || !!parseInt(mw.user.options.get('watchdefault'), 10));
+		var watchModule =
+			watchPref !== 'no' && (watchPref !== 'default' || !!parseInt(mw.user.options.get('watchdefault'), 10));
 		if (!watchModule) {
 			return $.Deferred().resolve();
 		}
 		var watch_query = {
 			action: 'watch',
-			titles: [ mw.config.get('wgPageName') ],
+			titles: [mw.config.get('wgPageName')],
 			token: mw.user.tokens.get('watchToken'),
 			// Expiry (note: mb.w.api delete params with value false)
-			watchlistexpiry: watchPref !== 'default' && watchPref !== 'yes' && watchPref
+			watchlistexpiry: watchPref !== 'default' && watchPref !== 'yes' && watchPref,
 		};
-		if (params.xfdcat === 'tfm' ) {
+		if (params.xfdcat === 'tfm') {
 			// Watch other module too
 			watch_query.titles.push(params.otherTemplateName);
 		}
@@ -678,7 +1044,7 @@ class Tfd extends XfdMode {
 			text: Morebits.string.formatReasonText(this.params.reason, true),
 			1: mw.config.get('wgTitle'),
 			module: this.params.scribunto ? 'Module:' : '',
-			2: this.params.tfdtarget
+			2: this.params.tfdtarget,
 		});
 	}
 
@@ -692,7 +1058,8 @@ class Tfd extends XfdMode {
 	}
 
 	getUserspaceLoggingExtraInfo() {
-		let params = this.params, text = '';
+		let params = this.params,
+			text = '';
 		if (params.xfdcat === 'tfm') {
 			text += ' (merge)';
 			if (params.tfdtarget) {
@@ -706,9 +1073,7 @@ class Tfd extends XfdMode {
 		}
 		return text;
 	}
-
 }
-
 
 class Ffd extends XfdMode {
 	static venueCode = 'ffd';
@@ -728,7 +1093,7 @@ class Ffd extends XfdMode {
 
 	getVenueWarning() {
 		if (mw.config.get('wgNamespaceNumber') !== 6) {
-			return 'FFD is selected but this page doesn\'t look like a file!';
+			return "FFD is selected but this page doesn't look like a file!";
 		}
 	}
 
@@ -769,18 +1134,20 @@ class Ffd extends XfdMode {
 
 			params.tagText = '{{ffd|log=' + date + '|help=off}}\n';
 			if (pageobj.canEdit()) {
-				text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
+				text = text.replace(
+					/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi,
+					''
+				);
 
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary('Listed for discussion at [[:' + params.discussionpage + ']].');
 				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('recreate');  // it might be possible for a file to exist without a description page
+				pageobj.setCreateOption('recreate'); // it might be possible for a file to exist without a description page
 				return pageobj.save();
 			} else {
 				return this.autoEditRequest(pageobj);
 			}
 		});
-
 	}
 
 	addToList() {
@@ -807,20 +1174,20 @@ class Ffd extends XfdMode {
 		return makeTemplate('subst:ffd2', {
 			Reason: Morebits.string.formatReasonText(this.params.reason, true),
 			1: mw.config.get('wgTitle'),
-			Uploader: this.params.initialContrib
+			Uploader: this.params.initialContrib,
 		});
 	}
-
 }
-
 
 class Cfd extends XfdMode {
 	static venueCode = 'cfd';
 	static venueLabel = 'CfD (Categories for discussion)';
 
 	static isDefaultChoice() {
-		return mw.config.get('wgNamespaceNumber') === 14 ||
-			(mw.config.get('wgNamespaceNumber') === 10 && /-stub$/.test(Morebits.pageNameNorm));
+		return (
+			mw.config.get('wgNamespaceNumber') === 14 ||
+			(mw.config.get('wgNamespaceNumber') === 10 && /-stub$/.test(Morebits.pageNameNorm))
+		);
 	}
 
 	getFieldsetLabel() {
@@ -832,7 +1199,7 @@ class Cfd extends XfdMode {
 	}
 
 	getVenueWarning(): string {
-		if ([ 10, 14 ].indexOf(mw.config.get('wgNamespaceNumber')) === -1) {
+		if ([10, 14].indexOf(mw.config.get('wgNamespaceNumber')) === -1) {
 			return 'CfD is only for categories and stub templates.';
 		}
 	}
@@ -844,17 +1211,19 @@ class Cfd extends XfdMode {
 			type: 'select',
 			label: 'Choose type of action wanted: ',
 			name: 'xfdcat',
-			list: isCategory ? [
-				{ type: 'option', label: 'Deletion', value: 'cfd', selected: true },
-				{ type: 'option', label: 'Merge', value: 'cfm' },
-				{ type: 'option', label: 'Renaming', value: 'cfr' },
-				{ type: 'option', label: 'Split', value: 'cfs' },
-				{ type: 'option', label: 'Convert into article', value: 'cfc' }
-			] : [
-				{ type: 'option', label: 'Stub Deletion', value: 'sfd-t', selected: true },
-				{ type: 'option', label: 'Stub Renaming', value: 'sfr-t' }
-			],
-			event: function(e) {
+			list: isCategory
+				? [
+						{ type: 'option', label: 'Deletion', value: 'cfd', selected: true },
+						{ type: 'option', label: 'Merge', value: 'cfm' },
+						{ type: 'option', label: 'Renaming', value: 'cfr' },
+						{ type: 'option', label: 'Split', value: 'cfs' },
+						{ type: 'option', label: 'Convert into article', value: 'cfc' },
+				  ]
+				: [
+						{ type: 'option', label: 'Stub Deletion', value: 'sfd-t', selected: true },
+						{ type: 'option', label: 'Stub Renaming', value: 'sfr-t' },
+				  ],
+			event: function (e) {
 				var value = e.target.value,
 					cfdtarget = e.target.form.cfdtarget,
 					cfdtarget2 = e.target.form.cfdtarget2;
@@ -887,10 +1256,11 @@ class Cfd extends XfdMode {
 						$(cfdtarget2).prop('disabled', true);
 						$(cfdtarget2).hide();
 					}
-				} else { // Update stub template label
+				} else {
+					// Update stub template label
 					Morebits.quickForm.setElementLabel(cfdtarget, 'Target stub template: ');
 				}
-			}
+			},
 		});
 
 		this.fieldset.append({
@@ -899,7 +1269,7 @@ class Cfd extends XfdMode {
 			label: 'Target category: ', // default, changed above
 			disabled: true,
 			required: true, // only when enabled
-			value: ''
+			value: '',
 		});
 		this.appendReasonArea();
 		return this.fieldset;
@@ -920,7 +1290,7 @@ class Cfd extends XfdMode {
 			'cfr': 'renaming',
 			'sfr-t': 'renaming',
 			'cfs': 'splitting',
-			'cfc': 'conversion'
+			'cfc': 'conversion',
 		};
 		this.params.action = summaryActions[this.params.xfdcat];
 		this.params.stub = mw.config.get('wgNamespaceNumber') !== 14;
@@ -941,27 +1311,32 @@ class Cfd extends XfdMode {
 		var pageobj = new Page(mw.config.get('wgPageName'), 'Tagging category with ' + params.action + ' tag');
 		pageobj.setFollowRedirect(true); // should never be needed, but if the page is moved, we would want to follow the redirect
 		return pageobj.load().then(() => {
-
 			// Set data for future actions first
 			var date = new Morebits.date(pageobj.getLoadTime());
 			params.logpage = 'Wikipedia:Categories for discussion/Log/' + date.format('YYYY MMMM D', 'utc');
 			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
 
 			var text = pageobj.getPageText();
-			params.tagText = makeTemplate('subst:' + params.xfdcat, {
-				1: params.cfdtarget, // for cfm, cfr, cfc, cfs, sfr-t
-				2: params.cfdtarget2 // for cfs
-			}) + '\n';
+			params.tagText =
+				makeTemplate('subst:' + params.xfdcat, {
+					1: params.cfdtarget, // for cfm, cfr, cfc, cfs, sfr-t
+					2: params.cfdtarget2, // for cfs
+				}) + '\n';
 
-			var editsummary = (params.stub ? 'Stub template' : 'Category') +
-				' being considered for ' + params.action + (params.xfdcat === 'cfc' ? ' to an article' : '') +
-				'; see [[:' + params.discussionpage + ']].';
+			var editsummary =
+				(params.stub ? 'Stub template' : 'Category') +
+				' being considered for ' +
+				params.action +
+				(params.xfdcat === 'cfc' ? ' to an article' : '') +
+				'; see [[:' +
+				params.discussionpage +
+				']].';
 
 			if (pageobj.canEdit()) {
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary(editsummary);
 				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('recreate');  // since categories can be populated without an actual page at that title
+				pageobj.setCreateOption('recreate'); // since categories can be populated without an actual page at that title
 				return pageobj.save();
 			} else {
 				return this.autoEditRequest(pageobj);
@@ -1005,20 +1380,23 @@ class Cfd extends XfdMode {
 			text: Morebits.string.formatReasonText(this.params.reason, true),
 			1: mw.config.get('wgTitle'),
 			2: this.params.cfdtarget,
-			3: this.params.cfdtarget2
+			3: this.params.cfdtarget2,
 		});
 	}
 
 	getNotifyText(): string {
-		return makeTemplate('subst:cfd notice', {
-			action: this.params.action,
-			1: Morebits.pageNameNorm,
-			stub: mw.config.get('wgNamespaceNumber') === 10 ? 'yes' : null
-		}) + ' ~~~~';
+		return (
+			makeTemplate('subst:cfd notice', {
+				action: this.params.action,
+				1: Morebits.pageNameNorm,
+				stub: mw.config.get('wgNamespaceNumber') === 10 ? 'yes' : null,
+			}) + ' ~~~~'
+		);
 	}
 
 	getUserspaceLoggingExtraInfo() {
-		let params = this.params, text = '';
+		let params = this.params,
+			text = '';
 		text += ' (' + toTLACase(params.xfdcat) + ')';
 		if (params.cfdtarget) {
 			var categoryOrTemplate = params.xfdcat.charAt(0) === 's' ? 'Template:' : ':Category:';
@@ -1029,10 +1407,7 @@ class Cfd extends XfdMode {
 		}
 		return text;
 	}
-
-
 }
-
 
 class Cfds extends XfdMode {
 	static venueCode = 'cfds';
@@ -1047,7 +1422,7 @@ class Cfds extends XfdMode {
 	}
 
 	getVenueWarning() {
-		if ([ 10, 14 ].indexOf(mw.config.get('wgNamespaceNumber')) === -1) {
+		if ([10, 14].indexOf(mw.config.get('wgNamespaceNumber')) === -1) {
 			return 'CfD is only for categories and stub templates.';
 		}
 	}
@@ -1065,22 +1440,23 @@ class Cfds extends XfdMode {
 				{ type: 'option', label: 'C2C: Consistency with names of similar categories', value: 'C2C' },
 				{ type: 'option', label: 'C2D: Rename to match article name', value: 'C2D' },
 				{ type: 'option', label: 'C2E: Author request', value: 'C2E' },
-				{ type: 'option', label: 'C2F: One eponymous article', value: 'C2F' }
-			]
+				{ type: 'option', label: 'C2F: One eponymous article', value: 'C2F' },
+			],
 		});
 
 		this.fieldset.append({
 			type: 'input',
 			name: 'cfdstarget',
 			label: 'New name: ',
-			required: true
+			required: true,
 		});
 		this.appendReasonArea();
 		return this.fieldset;
 	}
 
 	preprocessParams() {
-		if (this.params.cfdstarget) { // Add namespace if not given (CFDS)
+		if (this.params.cfdstarget) {
+			// Add namespace if not given (CFDS)
 			this.params.cfdstarget = addNs(this.params.cfdstarget, 14);
 		}
 	}
@@ -1104,7 +1480,7 @@ class Cfds extends XfdMode {
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary('Listed for speedy renaming; see [[WP:CFDS|Categories for discussion/Speedy]].');
 				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('recreate');  // since categories can be populated without an actual page at that title
+				pageobj.setCreateOption('recreate'); // since categories can be populated without an actual page at that title
 				return pageobj.save();
 			} else {
 				return this.autoEditRequest(pageobj);
@@ -1135,13 +1511,22 @@ class Cfds extends XfdMode {
 
 	getDiscussionWikitext(): string {
 		let params = this.params;
-		return '* [[:' + Morebits.pageNameNorm + ']] to [[:' + params.cfdstarget + ']]\u00A0\u2013 ' +
-			params.xfdcat + (params.reason ? ': ' + Morebits.string.formatReasonText(params.reason) : '.') + ' ~~~~';
+		return (
+			'* [[:' +
+			Morebits.pageNameNorm +
+			']] to [[:' +
+			params.cfdstarget +
+			']]\u00A0\u2013 ' +
+			params.xfdcat +
+			(params.reason ? ': ' + Morebits.string.formatReasonText(params.reason) : '.') +
+			' ~~~~'
+		);
 		// U+00A0 NO-BREAK SPACE; U+2013 EN RULE
 	}
 
 	getUserspaceLoggingExtraInfo() {
-		let params = this.params, text = '';
+		let params = this.params,
+			text = '';
 		text += ' (' + toTLACase(params.xfdcat) + ')';
 		// Ensure there's more than just 'Category:'
 		if (params.cfdstarget && params.cfdstarget.length > 9) {
@@ -1149,17 +1534,17 @@ class Cfds extends XfdMode {
 		}
 		return text;
 	}
-
 }
-
 
 class Mfd extends XfdMode {
 	static venueCode = 'mfd';
 	static venueLabel = 'MfD (Miscellany for deletion)';
 
 	static isDefaultChoice() {
-		return [ 0, 6, 10, 14, 828 ].indexOf(mw.config.get('wgNamespaceNumber')) === -1 ||
-			Morebits.pageNameNorm.indexOf('Template:User ', 0) === 0;
+		return (
+			[0, 6, 10, 14, 828].indexOf(mw.config.get('wgNamespaceNumber')) === -1 ||
+			Morebits.pageNameNorm.indexOf('Template:User ', 0) === 0
+		);
 	}
 
 	getMenuTooltip(): string {
@@ -1181,11 +1566,16 @@ class Mfd extends XfdMode {
 					label: 'Wrap deletion tag with <noinclude>',
 					value: 'noinclude',
 					name: 'noinclude',
-					tooltip: 'Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won\'t transclude. Select this option for userboxes.'
-				}
-			]
+					tooltip:
+						"Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won't transclude. Select this option for userboxes.",
+				},
+			],
 		});
-		if ((mw.config.get('wgNamespaceNumber') === 2 /* User: */ || mw.config.get('wgNamespaceNumber') === 3 /* User talk: */) && mw.config.exists('wgRelevantUserName')) {
+		if (
+			(mw.config.get('wgNamespaceNumber') === 2 /* User: */ ||
+				mw.config.get('wgNamespaceNumber') === 3) /* User talk: */ &&
+			mw.config.exists('wgRelevantUserName')
+		) {
 			this.fieldset.append({
 				type: 'checkbox',
 				list: [
@@ -1193,10 +1583,11 @@ class Mfd extends XfdMode {
 						label: 'Notify owner of userspace (if they are not the page creator)',
 						value: 'notifyuserspace',
 						name: 'notifyuserspace',
-						tooltip: 'If the user in whose userspace this page is located is not the page creator (for example, the page is a rescued article stored as a userspace draft), notify the userspace owner as well.',
-						checked: true
-					}
-				]
+						tooltip:
+							'If the user in whose userspace this page is located is not the page creator (for example, the page is a rescued article stored as a userspace draft), notify the userspace owner as well.',
+						checked: true,
+					},
+				],
 			});
 		}
 		this.appendReasonArea();
@@ -1209,7 +1600,7 @@ class Mfd extends XfdMode {
 
 	evaluate() {
 		super.evaluate();
-		this.tm.add(this.determineDiscussionPage, [])
+		this.tm.add(this.determineDiscussionPage, []);
 		this.tm.add(this.tagPage, [this.determineDiscussionPage]);
 		this.tm.add(this.addToList, [this.determineDiscussionPage]);
 		this.tm.add(this.createDiscussionPage, [this.determineDiscussionPage], this.printReasonText);
@@ -1223,7 +1614,7 @@ class Mfd extends XfdMode {
 	tagPage() {
 		let params = this.params;
 		var pageobj = new Page(mw.config.get('wgPageName'), 'Tagging page with deletion tag');
-		pageobj.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
+		pageobj.setFollowRedirect(true); // should never be needed, but if the page is moved, we would want to follow the redirect
 		return pageobj.load().then(() => {
 			var text = pageobj.getPageText();
 
@@ -1238,7 +1629,10 @@ class Mfd extends XfdMode {
 				}
 			}
 
-			if (pageobj.canEdit() && ['wikitext', 'javascript', 'css', 'sanitized-css'].indexOf(pageobj.getContentModel()) !== -1) {
+			if (
+				pageobj.canEdit() &&
+				['wikitext', 'javascript', 'css', 'sanitized-css'].indexOf(pageobj.getContentModel()) !== -1
+			) {
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary('Nominated for deletion; see [[:' + params.discussionpage + ']].');
 				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
@@ -1265,7 +1659,7 @@ class Mfd extends XfdMode {
 	getDiscussionWikitext(): string {
 		return makeTemplate('subst:mfd2', {
 			text: Morebits.string.formatReasonText(this.params.reason, true),
-			pg: Morebits.pageNameNorm
+			pg: Morebits.pageNameNorm,
 		});
 	}
 
@@ -1283,10 +1677,12 @@ class Mfd extends XfdMode {
 			var date_header_regex = new RegExp(date.format('(===[\\s]*MMMM[\\s]+D,[\\s]+YYYY[\\s]*===)', 'utc'));
 			var added_data = '{{subst:mfd3|pg=' + Morebits.pageNameNorm + params.numbering + '}}';
 
-			if (date_header_regex.test(text)) { // we have a section already
-				statelem.info('Found today\'s section, proceeding to add new entry');
+			if (date_header_regex.test(text)) {
+				// we have a section already
+				statelem.info("Found today's section, proceeding to add new entry");
 				text = text.replace(date_header_regex, '$1\n' + added_data);
-			} else { // we need to create a new section
+			} else {
+				// we need to create a new section
 				statelem.info('No section for today found, proceeding to create one');
 				text = text.replace('===', date_header + added_data + '\n\n===');
 			}
@@ -1304,7 +1700,10 @@ class Mfd extends XfdMode {
 		// Notify the user who owns the subpage if they are not the creator
 		if (params.notifyuserspace && params.userspaceOwner !== params.initialContrib) {
 			// Don't log if notifying creator above, will log then
-			return this.notifyTalkPage(params.userspaceOwner, new Morebits.status('Notifying owner of userspace (' + params.userspaceOwner + ')'));
+			return this.notifyTalkPage(
+				params.userspaceOwner,
+				new Morebits.status('Notifying owner of userspace (' + params.userspaceOwner + ')')
+			);
 		} else {
 			return $.Deferred().resolve();
 		}
@@ -1320,15 +1719,14 @@ class Mfd extends XfdMode {
 	}
 
 	getUserspaceLoggingExtraInfo() {
-		let params = this.params, text = '';
+		let params = this.params,
+			text = '';
 		if (params.notifyuserspace && params.userspaceOwner && params.userspaceOwner !== params.initialContrib) {
 			text += '; notified {{user|1=' + params.userspaceOwner + '}}';
 		}
 		return text;
 	}
-
 }
-
 
 class Rfd extends XfdMode {
 	static venueCode = 'rfd';
@@ -1347,7 +1745,8 @@ class Rfd extends XfdMode {
 	}
 
 	getUserspaceLoggingExtraInfo() {
-		let params = this.params, text = '';
+		let params = this.params,
+			text = '';
 		if (params.rfdtarget) {
 			text += '; Target: [[:' + params.rfdtarget + ']]';
 			if (params.relatedpage) {
@@ -1367,9 +1766,9 @@ class Rfd extends XfdMode {
 					value: 'relatedpage',
 					name: 'relatedpage',
 					tooltip: "A notification template will be placed on the talk page of this redirect's target if this is true.",
-					checked: true
-				}
-			]
+					checked: true,
+				},
+			],
 		});
 		this.appendReasonArea();
 		return this.fieldset;
@@ -1401,12 +1800,12 @@ class Rfd extends XfdMode {
 		// avoid relying on the client clock to build the log page
 		let isSoftRedirect = !!document.getElementById('softredirect');
 		var query = {
-			'action': 'query',
-			'curtimestamp': true,
-			'format': 'json',
+			action: 'query',
+			curtimestamp: true,
+			format: 'json',
 			// Find current target of redirect (for hard redirects only)
-			'titles': !isSoftRedirect && mw.config.get('wgPageName'),
-			'redirects': !isSoftRedirect
+			titles: !isSoftRedirect && mw.config.get('wgPageName'),
+			redirects: !isSoftRedirect,
 		};
 		if (isSoftRedirect) {
 			// For soft redirects, define the target early
@@ -1445,7 +1844,8 @@ class Rfd extends XfdMode {
 		return pageobj.load().then(() => {
 			var text = pageobj.getPageText();
 			// Imperfect for edit request but so be it
-			params.tagText = '{{subst:rfd|' + (mw.config.get('wgNamespaceNumber') === 10 ? 'showontransclusion=1|' : '') + 'content=\n';
+			params.tagText =
+				'{{subst:rfd|' + (mw.config.get('wgNamespaceNumber') === 10 ? 'showontransclusion=1|' : '') + 'content=\n';
 
 			if (pageobj.canEdit()) {
 				pageobj.setPageText(params.tagText + text + '\n}}');
@@ -1464,13 +1864,13 @@ class Rfd extends XfdMode {
 		return makeTemplate('subst:rfd2', {
 			text: (params.reason ? Morebits.string.formatReasonText(params.reason) : '') + ' ~~~~',
 			redirect: Morebits.pageNameNorm,
-			target: params.rfdtarget && (params.rfdtarget + (params.section ? '#' + params.section : ''))
+			target: params.rfdtarget && params.rfdtarget + (params.section ? '#' + params.section : ''),
 		});
 	}
 
 	addToList(): JQuery.Promise<void> {
 		let params = this.params;
-		let pageobj = new Page(params.logpage, 'Adding discussion to today\'s log');
+		let pageobj = new Page(params.logpage, "Adding discussion to today's log");
 		pageobj.setFollowRedirect(true);
 		return pageobj.load().then(() => {
 			var statelem = pageobj.getStatusElement();
@@ -1526,7 +1926,6 @@ class Rfd extends XfdMode {
 	}
 }
 
-
 class Rm extends XfdMode {
 	static venueCode = 'rm';
 	static venueLabel = 'RM (Requested moves)';
@@ -1536,7 +1935,8 @@ class Rm extends XfdMode {
 	}
 
 	getVenueWarning(): string | void {
-		if (mw.config.get('wgNamespaceNumber') === 14) { // category
+		if (mw.config.get('wgNamespaceNumber') === 14) {
+			// category
 			return 'Please use CfD or CfDS for category renames.';
 		}
 	}
@@ -1550,19 +1950,21 @@ class Rm extends XfdMode {
 					label: 'Uncontroversial technical request',
 					value: 'rmtr',
 					name: 'rmtr',
-					tooltip: 'Use this option when you are unable to perform this uncontroversial move yourself because of a technical reason (e.g. a page already exists at the new title, or the page is protected)',
+					tooltip:
+						'Use this option when you are unable to perform this uncontroversial move yourself because of a technical reason (e.g. a page already exists at the new title, or the page is protected)',
 					checked: false,
 					event: (evt) => {
 						this.result.newname.required = evt.target.checked;
-					}
-				}
-			]
+					},
+				},
+			],
 		});
 		this.fieldset.append({
 			type: 'input',
 			name: 'newname',
 			label: 'New title: ',
-			tooltip: 'Required for technical requests. Otherwise, if unsure of the appropriate title, you may leave it blank.'
+			tooltip:
+				'Required for technical requests. Otherwise, if unsure of the appropriate title, you may leave it blank.',
 		});
 
 		this.appendReasonArea();
@@ -1572,16 +1974,20 @@ class Rm extends XfdMode {
 	getDiscussionWikitext(): string {
 		let pageName = new mw.Title(Morebits.pageNameNorm).getSubjectPage().toText();
 		let params = this.params;
-		return (params.rmtr ?
-			'{{subst:RMassist|1=' + pageName + '|2=' + params.newname :
-			'{{subst:Requested move|current1=' + pageName + '|new1=' + params.newname)
-			+ '|reason=' + params.reason + '}}';
+		return (
+			(params.rmtr
+				? '{{subst:RMassist|1=' + pageName + '|2=' + params.newname
+				: '{{subst:Requested move|current1=' + pageName + '|new1=' + params.newname) +
+			'|reason=' +
+			params.reason +
+			'}}'
+		);
 	}
 
 	preprocessParams() {
-		this.params.discussionpage = this.params.rmtr ?
-			'Wikipedia:Requested moves/Technical requests' :
-			new mw.Title(Morebits.pageNameNorm).getTalkPage().toText();
+		this.params.discussionpage = this.params.rmtr
+			? 'Wikipedia:Requested moves/Technical requests'
+			: new mw.Title(Morebits.pageNameNorm).getTalkPage().toText();
 	}
 
 	showPreview(form: HTMLFormElement) {
@@ -1633,7 +2039,8 @@ class Rm extends XfdMode {
 	}
 
 	getUserspaceLoggingExtraInfo() {
-		let params = this.params, text = '';
+		let params = this.params,
+			text = '';
 		if (params.rmtr) {
 			text += ' (technical)';
 		}
@@ -1642,11 +2049,9 @@ class Rm extends XfdMode {
 		}
 		return text;
 	}
-
 }
 
-
-XfdCore.modeList = [ Afd, Rfd, Cfd, Cfds, Tfd, Ffd, Mfd, Rm ];
+XfdCore.modeList = [Afd, Rfd, Cfd, Cfds, Tfd, Ffd, Mfd, Rm];
 
 export class Xfd extends XfdCore {
 	footerlinks = {
@@ -1654,5 +2059,5 @@ export class Xfd extends XfdCore {
 		'XfD prefs': 'WP:TW/PREF#xfd',
 		'Twinkle help': 'WP:TW/DOC#xfd',
 		'Give feedback': 'WT:TW',
-	}
+	};
 }

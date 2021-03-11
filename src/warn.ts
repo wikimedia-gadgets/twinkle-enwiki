@@ -1,11 +1,10 @@
 import { Twinkle, WarnCore, obj_entries, warningLevel, arr_includes, warning } from './core';
 
 export class Warn extends WarnCore {
-
 	warningLevels: Record<
 		string,
 		{ label: string; summaryPrefix?: string; selected: (pref: number) => boolean; visible?: () => boolean }
-		> = {
+	> = {
 		level1: {
 			label: '1: General note',
 			selected: (pref) => pref === 1,
@@ -1068,7 +1067,7 @@ export class Warn extends WarnCore {
 							},
 							data
 						);
-					})
+					}),
 			};
 		} else {
 			groups.singlenotice = {
@@ -1114,7 +1113,6 @@ export class Warn extends WarnCore {
 	}
 
 	getWarningWikitext(templateName, article, reason, isCustom) {
-
 		var text = '{{subst:' + templateName;
 
 		// add linked article for user warnings
@@ -1165,31 +1163,29 @@ export class Warn extends WarnCore {
 		// Tags that don't take a linked article, but something else (often a username).
 		// The value of each tag is the label next to the input field
 		switch (template) {
-
-		case 'uw-agf-sock':
-			input.label = 'Optional username of other account (without User:) ';
-			input.className = 'userInput';
-			break;
-		case 'uw-bite':
-			input.label = "Username of 'bitten' user (without User:) ";
-			input.className = 'userInput';
-			break;
-		case 'uw-socksuspect':
-			input.label = 'Username of sock master, if known (without User:) ';
-			input.className = 'userInput';
-			break;
-		case 'uw-username':
-			input.label = 'Username violates policy because... ';
-			break;
-		case 'uw-aiv':
-			input.label = 'Optional username that was reported (without User:) ';
-			input.className = 'userInput';
-			break;
-		// no default
+			case 'uw-agf-sock':
+				input.label = 'Optional username of other account (without User:) ';
+				input.className = 'userInput';
+				break;
+			case 'uw-bite':
+				input.label = "Username of 'bitten' user (without User:) ";
+				input.className = 'userInput';
+				break;
+			case 'uw-socksuspect':
+				input.label = 'Username of sock master, if known (without User:) ';
+				input.className = 'userInput';
+				break;
+			case 'uw-username':
+				input.label = 'Username violates policy because... ';
+				break;
+			case 'uw-aiv':
+				input.label = 'Optional username that was reported (without User:) ';
+				input.className = 'userInput';
+				break;
+			// no default
 		}
 
 		return input;
-
 	}
 
 	customiseSummaryWithInput(summary: string, input: string, messageData: warning) {
