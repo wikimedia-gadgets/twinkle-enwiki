@@ -21,11 +21,11 @@ OR using OAuth:
     { "apiUrl": "", "OAuthCredentials": {"consumerToken": "", "consumerSecret": "", "accessToken": "", "accessSecret": "" } }
  */
 (async () => {
-	const {mwn} = require('mwn');
+	const { mwn } = require('mwn');
 	let user;
 	try {
 		user = await mwn.init('./credentials.json');
-	} catch(e) {
+	} catch (e) {
 		if (e instanceof mwn.Error) {
 			console.log(`[mwn]: can't disable twinkle as gadget: login failure: ${e}`);
 			console.log(e.stack);

@@ -1,5 +1,13 @@
-import {bot, setupMWBrowser, setupMwn, TwinkleModule, createAndGotoRandomPage,
-	readText, goto, rand} from './test_base';
+import {
+	bot,
+	setupMWBrowser,
+	setupMwn,
+	TwinkleModule,
+	createAndGotoRandomPage,
+	readText,
+	goto,
+	rand,
+} from './test_base';
 
 function monthYear() {
 	return new bot.date().format('MMMM YYYY');
@@ -9,10 +17,7 @@ describe('tag', () => {
 	jest.setTimeout(5000000);
 
 	beforeAll(async () => {
-		await Promise.all([
-			setupMwn(),
-			setupMWBrowser(page)
-		]);
+		await Promise.all([setupMwn(), setupMWBrowser(page)]);
 	});
 
 	it('tags a page with {{cleanup rewrite}}', async () => {
@@ -39,8 +44,8 @@ describe('tag', () => {
 	// action complete doesn't trigger :(
 	it('tags other article with {{merge}}', async () => {
 		const [page1, page2] = await Promise.all([
-			bot.create('Tag merge' + rand(), 'testcontent').then(p => p.title),
-			bot.create('Tag merge' + rand(), 'testcontent').then(p => p.title)
+			bot.create('Tag merge' + rand(), 'testcontent').then((p) => p.title),
+			bot.create('Tag merge' + rand(), 'testcontent').then((p) => p.title),
 		]);
 		await goto(page1);
 		const tag = await new TwinkleModule('tag').open();
@@ -53,12 +58,10 @@ describe('tag', () => {
 			`{{Merge|1=${page2}|discuss=Talk:${page1}#Proposed merge of ${page2} with ${page1}|date=${monthYear()}}}`
 		);
 		expect(await readText(page2)).toContain(
-		`{{Merge|1=${page1}|discuss=Talk:${page1}#Proposed merge of ${page2} with ${page1}|date=${monthYear()}}}`
+			`{{Merge|1=${page1}|discuss=Talk:${page1}#Proposed merge of ${page2} with ${page1}|date=${monthYear()}}}`
 		);
 		expect(await readText('Talk:' + page1)).toMatch(`== Proposed merge of [[${page2}]] with [[${page1}]] ==
 
 this is reason`);
 	});
-
-
 });

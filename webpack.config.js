@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
@@ -14,20 +15,20 @@ module.exports = {
 				// exclude: /node_modules/, // XXX: won't this exclude twinkle-core ?
 				options: {
 					// disable type checker - we will use it in fork plugin
-					transpileOnly: true
-				}
+					transpileOnly: true,
+				},
 			},
 		],
 	},
 	resolve: {
-		extensions: [ '.ts' ],
+		extensions: ['.ts'],
 	},
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'build')
+		path: path.resolve(__dirname, 'build'),
 	},
 	devServer: {
 		contentBase: path.join(__dirname, 'build'),
-		port: 5500
-	}
+		port: 5500,
+	},
 };

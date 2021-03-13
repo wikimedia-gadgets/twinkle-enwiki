@@ -13,19 +13,19 @@ module.exports = {
 				exclude: /node_modules/, // XXX: won't this exclude twinkle-core ?
 				options: {
 					// disable type checker - we will use it in fork plugin
-					transpileOnly: true
-				}
+					transpileOnly: true,
+				},
 			},
 		],
 	},
 	resolve: {
-		extensions: [ '.ts' ],
+		extensions: ['.ts'],
 	},
 	plugins: [
 		// new ForkTsCheckerWebpackPlugin()
 	],
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'build')
-	}
+		path: path.resolve(__dirname, 'build'),
+	},
 };

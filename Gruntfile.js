@@ -1,8 +1,7 @@
 const OUTPUT_DIR = './build';
 const OUTPUT_FILE = './build/bundle.js';
 
-const header =
-`/*  _______________________________________________________________________________
+const header = `/*  _______________________________________________________________________________
  * |                                                                               |
  * |                     === WARNING: GLOBAL GADGET FILE ===                       |
  * |                   Changes to this page affect many users.                     |
@@ -18,14 +17,13 @@ const header =
 const footer = `
 /* </nowiki> */`;
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 	grunt.initConfig({
-
 		// Clean build directory first
-		clean: [ OUTPUT_DIR ],
+		clean: [OUTPUT_DIR],
 
 		webpack: {
-			myConfig: require('./webpack.prod.config.js')
+			myConfig: require('./webpack.prod.config.js'),
 		},
 
 		// Escape any nowiki tags in code so they don't break the on-wiki gadget file
@@ -35,21 +33,21 @@ module.exports = function(grunt) {
 					patterns: [
 						{
 							match: /<nowiki>/g,
-							replacement: '<no"+"wiki>'
+							replacement: '<no"+"wiki>',
 						},
 						{
 							match: /<\/nowiki>/g,
-							replacement: '</no"+"wiki>'
-						}
-					]
+							replacement: '</no"+"wiki>',
+						},
+					],
 				},
 				files: [
 					{
-						src: [ OUTPUT_FILE ],
-						dest: OUTPUT_FILE
-					}
-				]
-			}
+						src: [OUTPUT_FILE],
+						dest: OUTPUT_FILE,
+					},
+				],
+			},
 		},
 
 		// Concatenate the header and footer comments
@@ -59,15 +57,14 @@ module.exports = function(grunt) {
 				banner: header,
 				footer: footer,
 				stripBanners: {
-					block: true
-				}
+					block: true,
+				},
 			},
 			dist: {
-				src: [ OUTPUT_FILE ],
-				dest: OUTPUT_FILE
-			}
-		}
-
+				src: [OUTPUT_FILE],
+				dest: OUTPUT_FILE,
+			},
+		},
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
@@ -76,5 +73,4 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 
 	grunt.registerTask('build', ['clean', 'webpack', 'replace', 'concat']);
-
 };
