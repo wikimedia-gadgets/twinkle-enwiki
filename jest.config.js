@@ -3,7 +3,7 @@ const tsJestOptions = {
 		diagnostics: {
 			warnOnly: true,
 		},
-	}
+	},
 };
 
 module.exports = {
@@ -13,9 +13,9 @@ module.exports = {
 			testMatch: ['<rootDir>/tests/unit/*.test.[jt]s'],
 			preset: 'ts-jest',
 			testEnvironment: 'jsdom',
-			setupFilesAfterEnv: ['mock-mediawiki'],
+			setupFilesAfterEnv: ['mock-mediawiki', './tests/expect-setup.js'],
 			globals: {
-				...tsJestOptions
+				...tsJestOptions,
 			},
 		},
 		{
@@ -25,6 +25,7 @@ module.exports = {
 			transform: {
 				'^.+\\.ts$': 'ts-jest',
 			},
+			setupFilesAfterEnv: ['./tests/expect-setup.js'],
 			testEnvironmentOptions: {
 				'jest-playwright': {
 					launchOptions: {
@@ -34,7 +35,7 @@ module.exports = {
 				},
 			},
 			globals: {
-				...tsJestOptions
+				...tsJestOptions,
 			},
 		},
 	],
