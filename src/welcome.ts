@@ -1,7 +1,11 @@
-import { Twinkle } from './core';
+import { Twinkle, TwinkleModule } from './core';
 
-export class Welcome {
+export class Welcome extends TwinkleModule {
+	moduleName = 'welcome';
+	static moduleName = 'welcome';
+
 	constructor() {
+		super();
 		if (mw.util.getParamValue('friendlywelcome')) {
 			if (mw.util.getParamValue('friendlywelcome') === 'auto') {
 				Welcome.auto();
@@ -89,7 +93,7 @@ export class Welcome {
 					Welcome.callback(mw.config.get('wgRelevantUserName'));
 				},
 				'Wel',
-				'friendly-welcome',
+				'twinkle-welcome',
 				'Welcome user'
 			);
 		}
