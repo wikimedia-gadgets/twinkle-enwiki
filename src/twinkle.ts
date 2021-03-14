@@ -15,6 +15,7 @@ import { Welcome } from './welcome';
 import { Shared } from './shared';
 import { Talkback } from './talkback';
 import { Arv } from './arv';
+import { Unlink } from './unlink';
 
 // no customisation; import directly from core
 import { DiffCore as Diff } from './core';
@@ -55,6 +56,7 @@ Twinkle.registeredModules = [
 	Welcome,
 	Shared,
 	Talkback,
+	Unlink,
 ];
 
 for (let module of Twinkle.registeredModules) {
