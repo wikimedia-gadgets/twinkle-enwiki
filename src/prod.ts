@@ -1,5 +1,5 @@
-import { Api, Page, Twinkle, TwinkleModule } from './core';
-import { hatnoteRegex, makeFindSourcesDiv } from './common';
+import { Api, makeOptoutLink, Page, Twinkle, TwinkleModule } from './core';
+import { hatnoteRegex, makeFindSourcesDiv, optoutTemplates } from './common';
 
 export class Prod extends TwinkleModule {
 	moduleName = 'prod';
@@ -445,7 +445,7 @@ export class Prod extends TwinkleModule {
 			user.setNotifyBots(true);
 			user.setNotifyIndef(true);
 		} else {
-			user.setNotifySkips(Twinkle.makeOptoutLink('prod'), Twinkle.optoutTemplates);
+			user.setNotifySkips(makeOptoutLink('prod'), optoutTemplates);
 		}
 		user.notify(function onNotifySuccess() {
 			// add nomination to the userspace log, if the user has enabled it

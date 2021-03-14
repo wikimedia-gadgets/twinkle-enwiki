@@ -1,4 +1,5 @@
 import { Twinkle, TwinkleModule } from './core';
+import { optoutTemplates } from './common';
 
 export class Talkback extends TwinkleModule {
 	moduleName = 'talkback';
@@ -83,7 +84,7 @@ export class Talkback extends TwinkleModule {
 
 		// Check whether the user has opted out from talkback
 		var user = new Morebits.wiki.user(mw.config.get('wgRelevantUserName'), 'Fetching talkback opt-out status');
-		user.setNotifySkips('userjs.invalid/noTalkback', Twinkle.optoutTemplates);
+		user.setNotifySkips('userjs.invalid/noTalkback', optoutTemplates);
 		user.load(Talkback.optoutStatus);
 	}
 
