@@ -9,7 +9,9 @@ import { Fluff } from './fluff';
 import { BatchDelete } from './batchdelete';
 import { Protect } from './protect';
 import { Block } from './block';
+import { Prod } from './prod';
 import { Deprod } from './deprod';
+import { Welcome } from './welcome';
 
 // no customisation; import directly from core
 import { DiffCore as Diff } from './core';
@@ -34,7 +36,7 @@ Twinkle.summaryAd = ' ([[WP:TW|TW]])';
 
 Twinkle.init();
 
-Twinkle.registeredModules = [Xfd, Tag, Speedy, Diff, Warn, Fluff, BatchDelete, Protect, Block, Deprod];
+Twinkle.registeredModules = [Xfd, Tag, Speedy, Diff, Warn, Fluff, BatchDelete, Protect, Block, Prod, Deprod, Welcome];
 
 for (let module of Twinkle.registeredModules) {
 	Twinkle.addInitCallback(() => new module(), module.moduleName);
