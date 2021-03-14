@@ -16,6 +16,7 @@ import { Shared } from './shared';
 import { Talkback } from './talkback';
 import { Arv } from './arv';
 import { Unlink } from './unlink';
+import { BatchUndelete } from './batchundelete';
 
 // no customisation; import directly from core
 import { DiffCore as Diff } from './core';
@@ -57,6 +58,7 @@ Twinkle.registeredModules = [
 	Shared,
 	Talkback,
 	Unlink,
+	BatchUndelete,
 ];
 
 for (let module of Twinkle.registeredModules) {
