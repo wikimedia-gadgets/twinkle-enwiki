@@ -13,6 +13,7 @@ import { Prod } from './prod';
 import { Deprod } from './deprod';
 import { Welcome } from './welcome';
 import { Shared } from './shared';
+import { Talkback } from './talkback';
 
 // no customisation; import directly from core
 import { DiffCore as Diff } from './core';
@@ -51,6 +52,7 @@ Twinkle.registeredModules = [
 	Deprod,
 	Welcome,
 	Shared,
+	Talkback,
 ];
 
 for (let module of Twinkle.registeredModules) {
