@@ -13,7 +13,7 @@ module.exports = {
 			testMatch: ['<rootDir>/tests/unit/*.test.[jt]s'],
 			preset: 'ts-jest',
 			testEnvironment: 'jsdom',
-			setupFilesAfterEnv: ['mock-mediawiki', './tests/expect-setup.js'],
+			setupFilesAfterEnv: ['mock-mediawiki', './tests/expect-setup.ts'],
 			globals: {
 				...tsJestOptions,
 			},
@@ -25,7 +25,7 @@ module.exports = {
 			transform: {
 				'^.+\\.ts$': 'ts-jest',
 			},
-			setupFilesAfterEnv: ['./tests/expect-setup.js'],
+			setupFilesAfterEnv: ['./tests/expect-setup.ts'],
 			testEnvironmentOptions: {
 				'jest-playwright': {
 					launchOptions: {
