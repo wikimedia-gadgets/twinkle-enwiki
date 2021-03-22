@@ -560,7 +560,7 @@ class Afd extends XfdMode {
 
 			pageobj.setPageText(text);
 			pageobj.setEditSummary('Nominated for deletion; see [[:' + params.discussionpage + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+			pageobj.setWatchlist(getPref('xfdWatchPage'));
 			pageobj.setCreateOption('nocreate');
 			return pageobj.save();
 		} else {
@@ -590,7 +590,7 @@ class Afd extends XfdMode {
 		return pageobj.load().then(() => {
 			pageobj.setPageText(this.getDiscussionWikitext());
 			pageobj.setEditSummary('Creating deletion discussion page for [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('createonly');
 			return pageobj.save();
 		});
@@ -633,7 +633,7 @@ class Afd extends XfdMode {
 
 			pageobj.setPageText(text);
 			pageobj.setEditSummary('Adding [[:' + params.discussionpage + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchList'));
+			pageobj.setWatchlist(getPref('xfdWatchList'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
@@ -664,7 +664,7 @@ class Afd extends XfdMode {
 	}
 
 	patrolPage() {
-		if (Twinkle.getPref('markXfdPagesAsPatrolled')) {
+		if (getPref('markXfdPagesAsPatrolled')) {
 			new Page(Morebits.pageNameNorm).triage();
 		}
 		return $.Deferred().resolve(); // XXX
@@ -847,7 +847,7 @@ class Tfd extends XfdMode {
 			if (pageobj.canEdit() && ['wikitext', 'sanitized-css'].indexOf(pageobj.getContentModel()) !== -1) {
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary('Nominated for deletion; see [[:' + params.discussionpage + ']].');
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+				pageobj.setWatchlist(getPref('xfdWatchPage'));
 				if (params.scribunto) {
 					pageobj.setCreateOption('recreate'); // Module /doc might not exist
 				}
@@ -923,7 +923,7 @@ class Tfd extends XfdMode {
 				'Listed for merging with [[:' + params.otherTemplateName + ']]; see [[:' + params.discussionpage + ']].'
 			);
 
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+			pageobj.setWatchlist(getPref('xfdWatchPage'));
 			if (params.scribunto) {
 				pageobj.setCreateOption('recreate'); // Module /doc might not exist
 			}
@@ -966,7 +966,7 @@ class Tfd extends XfdMode {
 					']].'
 			);
 
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
@@ -1015,7 +1015,7 @@ class Tfd extends XfdMode {
 		if (!params.scribunto) {
 			return $.Deferred().resolve();
 		}
-		var watchPref = Twinkle.getPref('xfdWatchPage');
+		var watchPref = getPref('xfdWatchPage');
 		// action=watch has no way to rely on user
 		// preferences (T262912), so we do it manually.
 		// The watchdefault pref appears to reliably return '1' (string),
@@ -1141,7 +1141,7 @@ class Ffd extends XfdMode {
 
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary('Listed for discussion at [[:' + params.discussionpage + ']].');
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+				pageobj.setWatchlist(getPref('xfdWatchPage'));
 				pageobj.setCreateOption('recreate'); // it might be possible for a file to exist without a description page
 				return pageobj.save();
 			} else {
@@ -1164,7 +1164,7 @@ class Ffd extends XfdMode {
 
 			pageobj.setPageText(text + '\n\n' + this.getDiscussionWikitext());
 			pageobj.setEditSummary('Adding [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
@@ -1335,7 +1335,7 @@ class Cfd extends XfdMode {
 			if (pageobj.canEdit()) {
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary(editsummary);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+				pageobj.setWatchlist(getPref('xfdWatchPage'));
 				pageobj.setCreateOption('recreate'); // since categories can be populated without an actual page at that title
 				return pageobj.save();
 			} else {
@@ -1369,7 +1369,7 @@ class Cfd extends XfdMode {
 
 			pageobj.setPageText(text);
 			pageobj.setEditSummary('Adding ' + params.action + ' nomination of [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
@@ -1479,7 +1479,7 @@ class Cfds extends XfdMode {
 			if (pageobj.canEdit()) {
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary('Listed for speedy renaming; see [[WP:CFDS|Categories for discussion/Speedy]].');
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+				pageobj.setWatchlist(getPref('xfdWatchPage'));
 				pageobj.setCreateOption('recreate'); // since categories can be populated without an actual page at that title
 				return pageobj.save();
 			} else {
@@ -1503,7 +1503,7 @@ class Cfds extends XfdMode {
 
 			pageobj.setPageText(text);
 			pageobj.setEditSummary('Adding [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
@@ -1635,7 +1635,7 @@ class Mfd extends XfdMode {
 			) {
 				pageobj.setPageText(params.tagText + text);
 				pageobj.setEditSummary('Nominated for deletion; see [[:' + params.discussionpage + ']].');
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+				pageobj.setWatchlist(getPref('xfdWatchPage'));
 				pageobj.setCreateOption('nocreate');
 				return pageobj.save();
 			} else {
@@ -1650,7 +1650,7 @@ class Mfd extends XfdMode {
 		return pageobj.load().then(() => {
 			pageobj.setPageText(this.getDiscussionWikitext());
 			pageobj.setEditSummary('Creating deletion discussion page for [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('createonly');
 			return pageobj.save();
 		});
@@ -1689,7 +1689,7 @@ class Mfd extends XfdMode {
 
 			pageobj.setPageText(text);
 			pageobj.setEditSummary('Adding [[:' + params.discussionpage + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchList'));
+			pageobj.setWatchlist(getPref('xfdWatchList'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
@@ -1850,7 +1850,7 @@ class Rfd extends XfdMode {
 			if (pageobj.canEdit()) {
 				pageobj.setPageText(params.tagText + text + '\n}}');
 				pageobj.setEditSummary('Listed for discussion at [[:' + params.discussionpage + ']].');
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+				pageobj.setWatchlist(getPref('xfdWatchPage'));
 				pageobj.setCreateOption('nocreate');
 				return pageobj.save();
 			} else {
@@ -1891,7 +1891,7 @@ class Rfd extends XfdMode {
 
 			pageobj.setPageText(text);
 			pageobj.setEditSummary('Adding [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('recreate');
 			return pageobj.save();
 		});
@@ -2014,7 +2014,7 @@ class Rm extends XfdMode {
 		pageobj.setEditSummary('Proposing move' + (params.newname ? ' to [[:' + params.newname + ']]' : ''));
 
 		pageobj.setCreateOption('recreate'); // since the talk page need not exist
-		pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+		pageobj.setWatchlist(getPref('xfdWatchDiscussion'));
 		return pageobj.append();
 	}
 

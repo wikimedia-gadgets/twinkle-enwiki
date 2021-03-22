@@ -1089,9 +1089,9 @@ class RedirectMode extends TagMode {
 	makeForm(Window) {
 		super.makeForm(Window);
 
-		if (Twinkle.getPref('customRedirectTagList').length) {
+		if (getPref('customRedirectTagList').length) {
 			this.scrollbox.append({ type: 'header', label: 'Custom tags' });
-			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: Twinkle.getPref('customRedirectTagList') });
+			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: getPref('customRedirectTagList') });
 		}
 
 		this.formAppendPatrolLink();
@@ -1214,9 +1214,9 @@ class ArticleMode extends TagMode {
 		super.makeForm(Window);
 
 		// append any custom tags
-		if (Twinkle.getPref('customTagList').length) {
+		if (getPref('customTagList').length) {
 			this.scrollbox.append({ type: 'header', label: 'Custom tags' });
-			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: Twinkle.getPref('customTagList') });
+			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: getPref('customTagList') });
 		}
 
 		this.form.append({
@@ -1228,7 +1228,7 @@ class ArticleMode extends TagMode {
 					name: 'group',
 					tooltip:
 						'If applying two or more templates supported by {{multiple issues}} and this box is checked, all supported templates will be grouped inside a {{multiple issues}} template.',
-					checked: Twinkle.getPref('groupByDefault'),
+					checked: getPref('groupByDefault'),
 				},
 			],
 		});
@@ -1512,7 +1512,7 @@ class ArticleMode extends TagMode {
 			talkpage.setNewSectionText(params.mergeReason.trim() + ' ~~~~');
 			talkpage.setNewSectionTitle(params.talkDiscussionTitleLinked);
 			talkpage.setChangeTags(Twinkle.changeTags);
-			talkpage.setWatchlist(Twinkle.getPref('watchMergeDiscussions'));
+			talkpage.setWatchlist(getPref('watchMergeDiscussions'));
 			talkpage.setCreateOption('recreate');
 			promises.push(talkpage.newSection());
 		}
@@ -1538,8 +1538,8 @@ class ArticleMode extends TagMode {
 					let pageText = this.insertTagText(this.getTagText(otherTagName) + '\n', otherpage.getPageText());
 					otherpage.setPageText(pageText);
 					otherpage.setEditSummary(TagCore.makeEditSummary([otherTagName], []));
-					otherpage.setWatchlist(Twinkle.getPref('watchTaggedPages'));
-					otherpage.setMinorEdit(Twinkle.getPref('markTaggedPagesAsMinor'));
+					otherpage.setWatchlist(getPref('watchTaggedPages'));
+					otherpage.setMinorEdit(getPref('markTaggedPagesAsMinor'));
 					otherpage.setCreateOption('nocreate');
 					return otherpage.save();
 				})
@@ -1658,9 +1658,9 @@ class FileMode extends TagMode {
 	makeForm(Window) {
 		super.makeForm(Window);
 
-		if (Twinkle.getPref('customFileTagList').length) {
+		if (getPref('customFileTagList').length) {
 			this.scrollbox.append({ type: 'header', label: 'Custom tags' });
-			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: Twinkle.getPref('customFileTagList') });
+			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: getPref('customFileTagList') });
 		}
 
 		this.formAppendPatrolLink();

@@ -1,4 +1,4 @@
-import { generateBatchPageLinks, sortByNamespace, Twinkle, TwinkleModule, Page, Api } from './core';
+import { generateBatchPageLinks, sortByNamespace, Twinkle, TwinkleModule, getPref } from './core';
 
 export class Deprod extends TwinkleModule {
 	moduleName = 'deprod';
@@ -42,7 +42,7 @@ export class Deprod extends TwinkleModule {
 			action: 'query',
 			generator: 'categorymembers',
 			gcmtitle: mw.config.get('wgPageName'),
-			gcmlimit: Twinkle.getPref('batchMax'),
+			gcmlimit: getPref('batchMax'),
 			gcmnamespace: '0|108|2', // mostly to ignore categories and files
 			prop: 'info|revisions',
 			rvprop: 'content',
@@ -154,7 +154,7 @@ export class Deprod extends TwinkleModule {
 		Morebits.status.init(event.target);
 
 		var batchOperation = new Morebits.batchOperation('Deleting pages');
-		batchOperation.setOption('chunkSize', Twinkle.getPref('batchChunks'));
+		batchOperation.setOption('chunkSize', getPref('batchChunks'));
 		batchOperation.setOption('preserveIndividualStatusLines', true);
 		batchOperation.setPageList(pages);
 		batchOperation.run((pageName: string) => {

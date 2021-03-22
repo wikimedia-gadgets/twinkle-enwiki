@@ -1,4 +1,4 @@
-import { Twinkle, TwinkleModule } from './core';
+import { Twinkle, TwinkleModule, getPref, addPortletLink } from './core';
 import { optoutTemplates } from './common';
 
 export class Talkback extends TwinkleModule {
@@ -10,7 +10,7 @@ export class Talkback extends TwinkleModule {
 		if (!mw.config.exists('wgRelevantUserName') || Morebits.ip.isRange(mw.config.get('wgRelevantUserName'))) {
 			return;
 		}
-		Twinkle.addPortletLink(Talkback.callback, 'TB', 'friendly-talkback', 'Easy talkback');
+		addPortletLink(Talkback.callback, 'TB', 'friendly-talkback', 'Easy talkback');
 	}
 
 	static callback() {
@@ -348,7 +348,7 @@ export class Talkback extends TwinkleModule {
 		talkpage.setAppendText('\n\n' + Talkback.callbacks.getNoticeWikitext(input));
 		talkpage.setChangeTags(Twinkle.changeTags);
 		talkpage.setCreateOption('recreate');
-		talkpage.setMinorEdit(Twinkle.getPref('markTalkbackAsMinor'));
+		talkpage.setMinorEdit(getPref('markTalkbackAsMinor'));
 		talkpage.setFollowRedirect(true);
 		talkpage.append();
 	}
@@ -390,23 +390,17 @@ export class Talkback extends TwinkleModule {
 					text = Morebits.string.safeReplace(Talkback.noticeboards[input.noticeboard].text, '$SECTION', input.section);
 					break;
 				case 'mail':
-					text =
-						'==' +
-						Twinkle.getPref('mailHeading') +
-						'==\n' +
-						"{{You've got mail|subject=" +
-						input.section +
-						'|ts=~~~~~}}';
+					text = '==' + getPref('mailHeading') + '==\n' + "{{You've got mail|subject=" + input.section + '|ts=~~~~~}}';
 
 					if (input.message) {
 						text += '\n' + input.message + '  ~~~~';
-					} else if (Twinkle.getPref('insertTalkbackSignature')) {
+					} else if (getPref('insertTalkbackSignature')) {
 						text += '\n~~~~';
 					}
 					break;
 				case 'see':
 					// clean talkback heading: strip section header markers that were erroneously suggested in the documentation
-					var heading = Twinkle.getPref('talkbackHeading').replace(/^\s*=+\s*(.*?)\s*=+$\s*/, '$1');
+					var heading = getPref('talkbackHeading').replace(/^\s*=+\s*(.*?)\s*=+$\s*/, '$1');
 					text =
 						'{{subst:Please see|location=' +
 						input.page +
@@ -422,7 +416,7 @@ export class Talkback extends TwinkleModule {
 					// clean talkback heading: strip section header markers that were erroneously suggested in the documentation
 					text =
 						'==' +
-						Twinkle.getPref('talkbackHeading').replace(/^\s*=+\s*(.*?)\s*=+$\s*/, '$1') +
+						getPref('talkbackHeading').replace(/^\s*=+\s*(.*?)\s*=+$\s*/, '$1') +
 						'==\n' +
 						'{{talkback|' +
 						input.page +
@@ -431,7 +425,7 @@ export class Talkback extends TwinkleModule {
 
 					if (input.message) {
 						text += '\n' + input.message + ' ~~~~';
-					} else if (Twinkle.getPref('insertTalkbackSignature')) {
+					} else if (getPref('insertTalkbackSignature')) {
 						text += '\n~~~~';
 					}
 			}

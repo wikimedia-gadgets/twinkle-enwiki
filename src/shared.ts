@@ -1,4 +1,4 @@
-import { Twinkle, TwinkleModule } from './core';
+import { Twinkle, TwinkleModule, getPref, addPortletLink } from './core';
 
 export class Shared extends TwinkleModule {
 	moduleName = 'shared';
@@ -7,7 +7,7 @@ export class Shared extends TwinkleModule {
 	constructor() {
 		super();
 		if (mw.config.get('wgNamespaceNumber') === 3 && mw.util.isIPAddress(mw.config.get('wgTitle'))) {
-			Twinkle.addPortletLink(
+			addPortletLink(
 				function () {
 					Shared.callback();
 				},
@@ -164,7 +164,7 @@ export class Shared extends TwinkleModule {
 			pageobj.setPageText(text + pageText);
 			pageobj.setEditSummary(summaryText);
 			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setMinorEdit(Twinkle.getPref('markSharedIPAsMinor'));
+			pageobj.setMinorEdit(getPref('markSharedIPAsMinor'));
 			pageobj.setCreateOption('recreate');
 			pageobj.save();
 		},

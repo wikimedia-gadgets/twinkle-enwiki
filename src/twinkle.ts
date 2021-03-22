@@ -1,4 +1,5 @@
-import { Twinkle } from './core';
+import { Twinkle, loadMessages, init, addInitCallback, Config } from './core';
+import messages from './messages.json';
 
 // import modules
 import { Xfd } from './xfd';
@@ -35,11 +36,13 @@ if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirm
 	throw new Error('Twinkle: forbidden!');
 }
 
+loadMessages(messages);
+
 Twinkle.userAgent = 'Twinkle ([[w:en:WP:TW]])';
 Twinkle.changeTags = 'twinkle';
 Twinkle.summaryAd = ' ([[WP:TW|TW]])';
 
-Twinkle.init();
+init();
 
 Twinkle.registeredModules = [
 	Xfd,
@@ -62,8 +65,11 @@ Twinkle.registeredModules = [
 ];
 
 for (let module of Twinkle.registeredModules) {
-	Twinkle.addInitCallback(() => new module(), module.moduleName);
+	addInitCallback(() => new module(), module.moduleName);
 }
+
+// Has any effect only on WP:TWPREF
+Config.init();
 
 // allow global access
 declare global {

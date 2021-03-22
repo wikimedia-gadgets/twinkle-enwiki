@@ -626,4 +626,165 @@ export class Block extends BlockCore {
 			],
 		},
 	];
+
+	toggle_see_alsos(e: QuickFormEvent) {
+		let checkbox = e.target;
+		var reason = checkbox.form.reason.value.replace(
+			new RegExp('( <!--|;) ' + 'see also ' + this.seeAlsos.join(' and ') + '( -->)?'),
+			''
+		);
+
+		this.seeAlsos = this.seeAlsos.filter((el) => el !== checkbox.value);
+
+		if (checkbox.checked) {
+			this.seeAlsos.push(checkbox.value);
+		}
+		var seeAlsoMessage = this.seeAlsos.join(' and ');
+
+		if (!this.seeAlsos.length) {
+			checkbox.form.reason.value = reason;
+		} else if (reason.indexOf('{{') !== -1) {
+			checkbox.form.reason.value = reason + ' <!-- see also ' + seeAlsoMessage + ' -->';
+		} else {
+			checkbox.form.reason.value = reason + '; see also ' + seeAlsoMessage;
+		}
+	}
+
+	dsinfo = {
+		'': {
+			code: '',
+		},
+		'Abortion': {
+			code: 'ab',
+			page: 'Wikipedia:Arbitration/Requests/Case/Abortion',
+		},
+		'American politics post-1992': {
+			code: 'ap',
+			page: 'Wikipedia:Arbitration/Requests/Case/American politics 2',
+		},
+		'Ancient Egyptian race controversy': {
+			code: 'aerc',
+			page: 'Wikipedia:Requests for arbitration/Ancient Egyptian race controversy',
+		},
+		'Arab-Israeli conflict': {
+			code: 'a-i',
+			page: 'Wikipedia:Arbitration/Index/Palestine-Israel articles',
+		},
+		'Armenia, Azerbaijan, or related conflicts': {
+			code: 'a-a',
+			page: 'Wikipedia:Requests for arbitration/Armenia-Azerbaijan 2',
+		},
+		'Biographies of Living Persons (BLPs)': {
+			code: 'blp',
+			page: 'Wikipedia:Requests for arbitration/Editing of Biographies of Living Persons',
+		},
+		'Climate change': {
+			code: 'cc',
+			page: 'Wikipedia:Arbitration/Requests/Case/Climate change',
+		},
+		'Complementary and alternative medicine': {
+			code: 'com',
+			page: 'Wikipedia:Arbitration/Requests/Case/Acupuncture',
+		},
+		'Eastern Europe or the Balkans': {
+			code: 'e-e',
+			page: 'Wikipedia:Requests for arbitration/Eastern Europe',
+		},
+		'Electronic cigarettes': {
+			code: 'ecig',
+			page: 'Wikipedia:Arbitration/Requests/Case/Editor conduct in e-cigs articles',
+		},
+		'Falun Gong': {
+			code: 'fg',
+			page: 'Wikipedia:Requests for arbitration/Falun Gong',
+		},
+		'Gender-related dispute or controversy and associated people (includes GamerGate)': {
+			code: 'gas',
+			page: 'Wikipedia:Arbitration/Requests/Case/Gender and sexuality',
+		},
+		'Genetically modified organisms (GMO)': {
+			code: 'gmo',
+			page: 'Wikipedia:Arbitration/Requests/Case/Genetically modified organisms',
+		},
+		'Gun control': {
+			code: 'gc',
+			page: 'Wikipedia:Arbitration/Requests/Case/Gun control',
+		},
+		'Horn of Africa (Ethiopia, Somalia, Eritrea, Djibouti)': {
+			code: 'horn',
+			page: 'Wikipedia:Arbitration/Requests/Case/Horn of Africa',
+		},
+		'India, Pakistan, and Afghanistan': {
+			code: 'ipa',
+			page: 'Wikipedia:Requests for arbitration/India-Pakistan',
+		},
+		'Infoboxes': {
+			code: 'cid',
+			page: 'Wikipedia:Arbitration/Requests/Case/Civility in infobox discussions',
+		},
+		'Kurds and Kurdistan': {
+			code: 'kurd',
+			page: 'Wikipedia:Arbitration/Requests/Case/Kurds and Kurdistan',
+		},
+		'Landmark Worldwide': {
+			code: 'lw',
+			page: 'Wikipedia:Arbitration/Requests/Case/Landmark Worldwide',
+		},
+		'Liancourt Rocks': {
+			code: 'lr',
+			page: 'Wikipedia:Requests for arbitration/Liancourt Rocks',
+		},
+		'Manual of Style and article titles': {
+			code: 'mos',
+			page: 'Wikipedia:Arbitration/Requests/Case/Article titles and capitalisation',
+		},
+		'Muhammad': {
+			code: 'muh-im',
+			page: 'Wikipedia:Arbitration/Requests/Case/Muhammad images',
+		},
+		'Pharmaceutical drug prices (medicine)': {
+			code: 'med',
+			page: 'Wikipedia:Arbitration/Requests/Case/Medicine',
+		},
+		'Prem Rawat': {
+			code: 'pr',
+			page: 'Wikipedia:Requests for arbitration/Prem Rawat',
+		},
+		'Pseudoscience and fringe science': {
+			code: 'ps',
+			page: 'Wikipedia:Requests for arbitration/Pseudoscience',
+		},
+		'Race/ethnicity and human abilities, behaviour, and intelligence': {
+			code: 'r-i',
+			page: 'Wikipedia:Arbitration/Requests/Case/Race and intelligence',
+		},
+		'Scientology': {
+			code: 'sci',
+			page: 'Wikipedia:Requests for arbitration/Scientology',
+		},
+		'Senkaku Islands dispute': {
+			code: 'sen',
+			page: 'Wikipedia:Arbitration/Requests/Case/Senkaku Islands',
+		},
+		'September 11 attacks': {
+			code: '9/11',
+			page: 'Wikipedia:Requests for arbitration/September 11 conspiracy theories',
+		},
+		'Shakespeare authorship question': {
+			code: 'saq',
+			page: 'Wikipedia:Arbitration/Requests/Case/Shakespeare authorship question',
+		},
+		'Transcendental Meditation movement': {
+			code: 'tm',
+			page: 'Wikipedia:Arbitration/Requests/Case/Transcendental Meditation movement',
+		},
+		'The Troubles': {
+			code: 'tt',
+			page: 'Wikipedia:Requests for arbitration/The Troubles',
+		},
+		'Waldorf education': {
+			code: 'we',
+			page: 'Wikipedia:Requests for arbitration/Waldorf education',
+		},
+	};
 }

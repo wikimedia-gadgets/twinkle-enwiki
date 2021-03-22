@@ -1,4 +1,4 @@
-import { Twinkle, TwinkleModule } from './core';
+import { Twinkle, TwinkleModule, getPref, addPortletLink } from './core';
 
 export class Welcome extends TwinkleModule {
 	moduleName = 'welcome';
@@ -60,7 +60,7 @@ export class Welcome extends TwinkleModule {
 						oHref +
 							'&' +
 							$.param({
-								friendlywelcome: Twinkle.getPref('quickWelcomeMode') === 'auto' ? 'auto' : 'norm',
+								friendlywelcome: getPref('quickWelcomeMode') === 'auto' ? 'auto' : 'norm',
 								vanarticle: Morebits.pageNameNorm,
 							})
 					);
@@ -77,7 +77,7 @@ export class Welcome extends TwinkleModule {
 						nHref +
 							'&' +
 							$.param({
-								friendlywelcome: Twinkle.getPref('quickWelcomeMode') === 'auto' ? 'auto' : 'norm',
+								friendlywelcome: getPref('quickWelcomeMode') === 'auto' ? 'auto' : 'norm',
 								vanarticle: Morebits.pageNameNorm,
 							})
 					);
@@ -88,7 +88,7 @@ export class Welcome extends TwinkleModule {
 		}
 		// Users and IPs but not IP ranges
 		if (mw.config.exists('wgRelevantUserName') && !Morebits.ip.isRange(mw.config.get('wgRelevantUserName'))) {
-			Twinkle.addPortletLink(
+			addPortletLink(
 				function () {
 					Welcome.callback(mw.config.get('wgRelevantUserName'));
 				},
@@ -104,7 +104,7 @@ export class Welcome extends TwinkleModule {
 		$('#catlinks').remove();
 
 		var params = {
-			template: Twinkle.getPref('quickWelcomeTemplate'),
+			template: getPref('quickWelcomeTemplate'),
 			article: mw.util.getParamValue('vanarticle') || '',
 			mode: 'auto',
 		};
@@ -197,12 +197,12 @@ export class Welcome extends TwinkleModule {
 
 		var container = new Morebits.quickForm.element({ type: 'fragment' });
 
-		if ((type === 'standard' || type === 'anonymous') && Twinkle.getPref('customWelcomeList').length) {
+		if ((type === 'standard' || type === 'anonymous') && getPref('customWelcomeList').length) {
 			container.append({ type: 'header', label: 'Custom welcome templates' });
 			container.append({
 				type: 'radio',
 				name: 'template',
-				list: Twinkle.getPref('customWelcomeList'),
+				list: getPref('customWelcomeList'),
 				event: function () {
 					e.target.form.article.disabled = false;
 				},
@@ -596,7 +596,7 @@ export class Welcome extends TwinkleModule {
 		});
 		if (properties) {
 			return properties.syntax
-				.replace('$USERNAME$', Twinkle.getPref('insertUsername') ? mw.config.get('wgUserName') : '')
+				.replace('$USERNAME$', getPref('insertUsername') ? mw.config.get('wgUserName') : '')
 				.replace('$ARTICLE$', article ? article : '')
 				.replace(/\$HEADER\$\s*/, '== Welcome ==\n\n')
 				.replace('$EXTRA$', ''); // EXTRA is not implemented yet
@@ -606,7 +606,7 @@ export class Welcome extends TwinkleModule {
 			template +
 			(article ? '|art=' + article : '') +
 			'}}' +
-			(Twinkle.getPref('customWelcomeSignature') ? ' ~~~~' : '')
+			(getPref('customWelcomeSignature') ? ' ~~~~' : '')
 		);
 	}
 
@@ -653,7 +653,7 @@ export class Welcome extends TwinkleModule {
 
 			var welcomeText = Welcome.getTemplateWikitext(params.type, params.template, params.article);
 
-			if (Twinkle.getPref('topWelcomes')) {
+			if (getPref('topWelcomes')) {
 				text = welcomeText + '\n\n' + text;
 			} else {
 				text += '\n' + welcomeText;
@@ -663,7 +663,7 @@ export class Welcome extends TwinkleModule {
 			pageobj.setPageText(text);
 			pageobj.setEditSummary(summaryText);
 			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('watchWelcomes'));
+			pageobj.setWatchlist(getPref('watchWelcomes'));
 			pageobj.setCreateOption('recreate');
 			pageobj.save();
 		},

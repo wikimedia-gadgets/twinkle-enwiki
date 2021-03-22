@@ -1,4 +1,4 @@
-import { Twinkle, TwinkleModule } from './core';
+import { Twinkle, TwinkleModule, getPref, addPortletLink } from './core';
 
 export class Arv extends TwinkleModule {
 	moduleName = 'arv';
@@ -18,7 +18,7 @@ export class Arv extends TwinkleModule {
 		}
 		var userType = isIP ? 'IP' + (Morebits.ip.isRange(username) ? ' range' : '') : 'user';
 
-		Twinkle.addPortletLink(
+		addPortletLink(
 			function () {
 				Arv.callback(username, isIP);
 			},
@@ -976,7 +976,7 @@ export class Arv extends TwinkleModule {
 		spiPage.setEditSummary('Adding new report for [[Special:Contributions/' + params.uid + '|' + params.uid + ']].');
 		spiPage.setChangeTags(Twinkle.changeTags);
 		spiPage.setAppendText(text);
-		spiPage.setWatchlist(Twinkle.getPref('spiWatchReport'));
+		spiPage.setWatchlist(getPref('spiWatchReport'));
 		spiPage.append();
 
 		Morebits.wiki.removeCheckpoint(); // all page updates have been started

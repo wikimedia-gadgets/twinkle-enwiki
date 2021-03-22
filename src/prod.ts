@@ -1,4 +1,4 @@
-import { Api, makeOptoutLink, Page, Twinkle, TwinkleModule } from './core';
+import { Api, makeOptoutLink, Page, Twinkle, TwinkleModule, getPref } from './core';
 import { hatnoteRegex, makeFindSourcesDiv, optoutTemplates } from './common';
 
 export class Prod extends TwinkleModule {
@@ -40,7 +40,7 @@ export class Prod extends TwinkleModule {
 	// Used in edit summaries, for comparisons, etc.
 	namespace: 'article' | 'file' | 'book';
 
-	defaultReason = Twinkle.getPref('prodReasonDefault');
+	defaultReason = getPref('prodReasonDefault');
 
 	makeWindow() {
 		switch (mw.config.get('wgNamespaceNumber')) {
@@ -377,13 +377,13 @@ export class Prod extends TwinkleModule {
 			}
 
 			// curate/patrol the page
-			if (Twinkle.getPref('markProdPagesAsPatrolled')) {
+			if (getPref('markProdPagesAsPatrolled')) {
 				pageobj.triage();
 			}
 
 			pageobj.setPageText(text);
 			pageobj.setEditSummary(summaryText);
-			pageobj.setWatchlist(Twinkle.getPref('watchProdPages'));
+			pageobj.setWatchlist(getPref('watchProdPages'));
 			pageobj.setCreateOption('nocreate');
 			return pageobj.save();
 		});
@@ -457,11 +457,11 @@ export class Prod extends TwinkleModule {
 	}
 
 	addToLog() {
-		if (!Twinkle.getPref('logProdPages')) {
+		if (!getPref('logProdPages')) {
 			return $.Deferred().resolve();
 		}
 		var params = this.params;
-		var usl = new Morebits.userspaceLogger(Twinkle.getPref('prodLogPageName'));
+		var usl = new Morebits.userspaceLogger(getPref('prodLogPageName'));
 		usl.initialText =
 			"This is a log of all [[WP:PROD|proposed deletion]] tags applied or endorsed by this user using [[WP:TW|Twinkle]]'s PROD module.\n\n" +
 			'If you no longer wish to keep this log, you can turn it off using the [[Wikipedia:Twinkle/Preferences|preferences panel]], and ' +

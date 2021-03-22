@@ -28,17 +28,17 @@ export class Warn extends WarnCore {
 		singlenotice: {
 			label: 'Single-issue notices',
 			selected: (pref) => pref === 6,
-			visible: () => !Twinkle.getPref('combinedSingletMenus'),
+			visible: () => !getPref('combinedSingletMenus'),
 		},
 		singlewarn: {
 			label: 'Single-issue warnings',
 			selected: (pref) => pref === 7,
-			visible: () => !Twinkle.getPref('combinedSingletMenus'),
+			visible: () => !getPref('combinedSingletMenus'),
 		},
 		singlecombined: {
 			label: 'Single-issue messages',
 			selected: (pref) => pref === 6 || pref === 7,
-			visible: () => !!Twinkle.getPref('combinedSingletMenus'),
+			visible: () => !!getPref('combinedSingletMenus'),
 		},
 		kitchensink: {
 			label: 'All warning templates',
@@ -52,7 +52,7 @@ export class Warn extends WarnCore {
 		custom: {
 			label: 'Custom warnings',
 			selected: (pref) => pref === 9,
-			visible: () => !!Twinkle.getPref('customWarningList')?.length,
+			visible: () => !!getPref('customWarningList')?.length,
 		},
 	};
 
@@ -1054,7 +1054,7 @@ export class Warn extends WarnCore {
 			level4im: { label: '4im: Only warning', list: $.extend(true, {}, groupObject) },
 		};
 
-		if (Twinkle.getPref('combinedSingletMenus')) {
+		if (getPref('combinedSingletMenus')) {
 			groups.singlecombined = {
 				label: 'Single-issue messages',
 				list: obj_entries(messages.singlenotice)
