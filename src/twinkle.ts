@@ -1,4 +1,4 @@
-import { Twinkle, loadMessages, init, addInitCallback, Config } from './core';
+import { Twinkle, loadMessages, init } from './core';
 import messages from './messages.json';
 
 // import modules
@@ -22,6 +22,8 @@ import { BatchUndelete } from './batchundelete';
 // no customisation; import directly from core
 import { DiffCore as Diff } from './core';
 
+import './globals';
+
 // Make jQuery Deferred exceptions hit the source map during debugging
 // XXX: there has to be a better way to do this ...
 // @ts-ignore
@@ -41,8 +43,6 @@ loadMessages(messages);
 Twinkle.userAgent = 'Twinkle ([[w:en:WP:TW]])';
 Twinkle.changeTags = 'twinkle';
 Twinkle.summaryAd = ' ([[WP:TW|TW]])';
-
-init();
 
 Twinkle.registeredModules = [
 	Xfd,
@@ -64,17 +64,4 @@ Twinkle.registeredModules = [
 	BatchUndelete,
 ];
 
-for (let module of Twinkle.registeredModules) {
-	addInitCallback(() => new module(), module.moduleName);
-}
-
-// Has any effect only on WP:TWPREF
-Config.init();
-
-// allow global access
-declare global {
-	interface Window {
-		Twinkle: typeof Twinkle;
-	}
-}
-window.Twinkle = Twinkle;
+init();

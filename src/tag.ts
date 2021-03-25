@@ -1,4 +1,4 @@
-import { Twinkle, Page, Config, configPreference } from './core';
+import { Twinkle, Page, Config, Preference, PreferenceGroup, getPref } from './core';
 import { arr_includes } from './utils';
 import { TagCore, tagData, tagListType, TagMode, tagSubgroup } from './core';
 import { hatnoteRegex } from './common';
@@ -1789,9 +1789,57 @@ export class Tag extends TagCore {
 		'Twinkle help': 'WP:TW/DOC#tag',
 	};
 
-	userPreferences() {
-		const prefs = super.userPreferences();
-		prefs.preferences = prefs.preferences.concat([] as configPreference[]);
+	static userPreferences() {
+		const prefs = super.userPreferences() as PreferenceGroup;
+		prefs.preferences = prefs.preferences.concat([
+			{
+				name: 'watchTaggedVenues',
+				label: 'Add page to watchlist when tagging these type of pages',
+				type: 'set',
+				setValues: { articles: 'Articles', drafts: 'Drafts', redirects: 'Redirects', files: 'Files' },
+				default: ['articles', 'drafts', 'redirects', 'files'],
+			},
+			{
+				name: 'watchMergeDiscussions',
+				label: 'Add talk pages to watchlist when starting merge discussions',
+				type: 'enum',
+				enumValues: Config.watchlistEnums,
+			},
+			{
+				name: 'groupByDefault',
+				label: 'Check the "group into {{multiple issues}}" box by default',
+				type: 'boolean',
+				default: true,
+			},
+			{
+				name: 'customTagList',
+				label: 'Custom article/draft maintenance tags to display',
+				helptip:
+					"These appear as additional options at the bottom of the list of tags. For example, you could add new maintenance tags which have not yet been added to Twinkle's defaults.",
+				type: 'customList',
+				customListValueTitle: 'Template name (no curly brackets)',
+				customListLabelTitle: 'Text to show in Tag dialog',
+				default: [],
+			},
+			{
+				name: 'customFileTagList',
+				label: 'Custom file maintenance tags to display',
+				helptip: 'Additional tags that you wish to add for files.',
+				type: 'customList',
+				customListValueTitle: 'Template name (no curly brackets)',
+				customListLabelTitle: 'Text to show in Tag dialog',
+				default: [],
+			},
+			{
+				name: 'customRedirectTagList',
+				label: 'Custom redirect category tags to display',
+				helptip: 'Additional tags that you wish to add for redirects.',
+				type: 'customList',
+				customListValueTitle: 'Template name (no curly brackets)',
+				customListLabelTitle: 'Text to show in Tag dialog',
+				default: [],
+			},
+		] as Preference[]);
 		return prefs;
 	}
 }

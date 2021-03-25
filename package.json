@@ -19,6 +19,9 @@
 		"test:integration:setup": "cd tests/integration/docker && bash main.sh",
 		"test:integration:teardown": "cd tests/integration/docker && docker-compose down"
 	},
+	"sideEffects": [
+		"src/globals.ts"
+	],
 	"dependencies": {
 		"@types/select2": "^4.0.53",
 		"tslib": "^2.0.3",

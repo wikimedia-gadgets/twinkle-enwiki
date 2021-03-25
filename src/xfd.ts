@@ -1,4 +1,4 @@
-import { Twinkle, Page, Api } from './core';
+import { getPref, Page, Api, PreferenceGroup, Preference, Config } from './core';
 import { addNs, arr_includes, makeTemplate, obj_entries, stripNs } from './utils';
 import { toTLACase, XfdCore, XfdMode } from './core';
 import { makeFindSourcesDiv, hatnoteRegex } from './common';
@@ -2060,4 +2060,44 @@ export class Xfd extends XfdCore {
 		'Twinkle help': 'WP:TW/DOC#xfd',
 		'Give feedback': 'WT:TW',
 	};
+
+	static userPreferences() {
+		const prefs = super.userPreferences() as PreferenceGroup;
+		prefs.preferences = prefs.preferences.concat([
+			{
+				name: 'noLogOnXfdNomination',
+				label: 'Do not create a userspace log entry when nominating at this venue',
+				type: 'set',
+				setValues: {
+					afd: 'AfD',
+					tfd: 'TfD',
+					ffd: 'FfD',
+					cfd: 'CfD',
+					cfds: 'CfD/S',
+					mfd: 'MfD',
+					rfd: 'RfD',
+					rm: 'RM',
+				},
+				default: [],
+			},
+			// TwinkleConfig.xfdWatchRelated (string)
+			// The watchlist setting of the target of a redirect being nominated for RfD.
+			{
+				name: 'xfdWatchRelated',
+				label: "Add the redirect's target page to watchlist (when notifying)",
+				helptip:
+					'This only applies for RfD, when leaving a notification on the talk page of the target of the redirect',
+				type: 'enum',
+				enumValues: Config.watchlistEnums,
+				default: 'default',
+			},
+			{
+				name: 'markXfdPagesAsPatrolled',
+				label: 'Mark page as patrolled/reviewed when nominating for AFD (if possible)',
+				type: 'boolean',
+				default: true,
+			},
+		] as Preference[]);
+		return prefs;
+	}
 }
