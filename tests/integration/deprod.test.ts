@@ -1,4 +1,4 @@
-import { setupMWBrowser, setupMwn, bot, goto, TwinkleModule } from './test_base';
+import { setupMWBrowser, setupMwn, bot, goto, TwinkleModuleTest } from './test_base';
 
 describe('deprod', () => {
 	jest.setTimeout(500000);
@@ -25,7 +25,7 @@ describe('deprod', () => {
 		]);
 
 		await goto('Category:Proposed deletion as of 1 March 2021');
-		let deprod = await new TwinkleModule('deprod').open();
+		let deprod = await new TwinkleModuleTest('deprod').open();
 		await page.uncheck('input[value="Deprod test/4"]');
 		await deprod.submit(); // TODO: fixup actionCompleted message display in deprod so this actually resolves,
 		// will involve porting Morebits.batchOperation to use promises.

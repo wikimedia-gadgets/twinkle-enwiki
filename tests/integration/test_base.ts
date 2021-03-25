@@ -57,7 +57,7 @@ export async function loadTwinkle() {
 	await page.evaluate(await readFile(repoRoot + 'build/bundle.js'));
 }
 
-export class TwinkleModule {
+export class TwinkleModuleTest {
 	moduleName: string;
 	constructor(moduleName) {
 		this.moduleName = moduleName;

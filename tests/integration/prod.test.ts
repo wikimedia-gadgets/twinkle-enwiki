@@ -1,4 +1,4 @@
-import { setupMWBrowser, setupMwn, bot, goto, TwinkleModule, readText, bot2 } from './test_base';
+import { setupMWBrowser, setupMwn, bot, goto, TwinkleModuleTest, readText, bot2 } from './test_base';
 
 describe('prod', () => {
 	jest.setTimeout(500000);
@@ -11,7 +11,7 @@ describe('prod', () => {
 		// create with bot2 so self-notification won't be aborted
 		await bot2.create('Prod test/1', 'Prod test page');
 		await goto('Prod test/1');
-		let prod = await new TwinkleModule('prod').open();
+		let prod = await new TwinkleModuleTest('prod').open();
 		await page.fill('.quickform textarea[name="reason"]', 'PROD CONCERN');
 		await prod.submit();
 
@@ -24,7 +24,7 @@ describe('prod', () => {
 	it('blp prod', async () => {
 		await bot2.create('Prod blp test/1', 'Prod test page');
 		await goto('Prod blp test/1');
-		let prod = await new TwinkleModule('prod').open();
+		let prod = await new TwinkleModuleTest('prod').open();
 		await page.click('.quickform input[value="prodblp"]');
 		await prod.submit();
 

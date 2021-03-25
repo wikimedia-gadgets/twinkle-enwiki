@@ -2,7 +2,7 @@ import {
 	bot,
 	setupMWBrowser,
 	setupMwn,
-	TwinkleModule,
+	TwinkleModuleTest,
 	createAndGotoRandomPage,
 	readText,
 	goto,
@@ -22,7 +22,7 @@ describe('tag', () => {
 
 	it('tags a page with {{cleanup rewrite}}', async () => {
 		const pageName = await createAndGotoRandomPage('Tag test');
-		const tag = await new TwinkleModule('tag').open();
+		const tag = await new TwinkleModuleTest('tag').open();
 		await page.check('input[value="Cleanup rewrite"]');
 		await tag.submit();
 
@@ -32,7 +32,7 @@ describe('tag', () => {
 
 	it('tags a page with {{cleanup}} with reason', async () => {
 		const pageName = await createAndGotoRandomPage('Tag test');
-		const tag = await new TwinkleModule('tag').open();
+		const tag = await new TwinkleModuleTest('tag').open();
 		await page.click('input[value="Cleanup"]');
 		await page.fill('input[name="tags.cleanup"]', 'cleanup reason');
 		await tag.submit();
@@ -41,14 +41,13 @@ describe('tag', () => {
 		expect(newText.startsWith('{{Cleanup|reason=cleanup reason|date=' + monthYear())).toBe(true);
 	});
 
-	// action complete doesn't trigger :(
 	it('tags other article with {{merge}}', async () => {
 		const [page1, page2] = await Promise.all([
 			bot.create('Tag merge' + rand(), 'testcontent').then((p) => p.title),
 			bot.create('Tag merge' + rand(), 'testcontent').then((p) => p.title),
 		]);
 		await goto(page1);
-		const tag = await new TwinkleModule('tag').open();
+		const tag = await new TwinkleModuleTest('tag').open();
 		await page.click('input[value="Merge"]');
 		await page.fill('input[name="tags.mergeTarget"]', page2);
 		await page.fill('textarea[name="tags.mergeReason"]', 'this is reason');
