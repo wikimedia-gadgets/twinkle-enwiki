@@ -1,10 +1,10 @@
 import { getPref, Page, Api, PreferenceGroup, Preference, Config } from './core';
 import { addNs, arr_includes, makeTemplate, obj_entries, stripNs } from './utils';
-import { toTLACase, XfdCore, XfdMode } from './core';
+import { XfdCore, XfdMode } from './core';
 import { makeFindSourcesDiv, hatnoteRegex } from './common';
 
 class Afd extends XfdMode {
-	static venueCode = 'afd';
+	static venueCode = 'AfD';
 	static venueLabel = 'AfD (Articles for deletion)';
 
 	static isDefaultChoice() {
@@ -33,7 +33,7 @@ class Afd extends XfdMode {
 		this.fieldset = super.generateFieldset();
 		this.fieldset.append({
 			type: 'div',
-			label: makeFindSourcesDiv(),
+			label: '', // Added later by Twinkle.makeFindSourcesDiv()
 			style: 'margin-bottom: 5px;',
 		});
 
@@ -432,6 +432,8 @@ class Afd extends XfdMode {
 	}
 
 	postRender(renderedFieldset: HTMLFieldSetElement) {
+		makeFindSourcesDiv('#twinkle-xfd-findsources');
+
 		$(renderedFieldset)
 			.find('[name=delsortCats]')
 			.attr('data-placeholder', 'Select delsort pages')
@@ -681,7 +683,7 @@ class Afd extends XfdMode {
 }
 
 class Tfd extends XfdMode {
-	static venueCode = 'tfd';
+	static venueCode = 'TfD';
 	static venueLabel = 'TfD (Templates for discussion)';
 
 	getFieldsetLabel() {
@@ -707,7 +709,7 @@ class Tfd extends XfdMode {
 				var target = e.target,
 					tfdtarget = target.form.tfdtarget;
 				// add/remove extra input box
-				if (target.value === 'tfm' && !tfdtarget) {
+				if (target.value === 'TfM' && !tfdtarget) {
 					tfdtarget = new Morebits.quickForm.element({
 						name: 'tfdtarget',
 						type: 'input',
@@ -725,8 +727,8 @@ class Tfd extends XfdMode {
 				}
 			},
 			list: [
-				{ type: 'option', label: 'Deletion', value: 'tfd', selected: true },
-				{ type: 'option', label: 'Merge', value: 'tfm' },
+				{ type: 'option', label: 'Deletion', value: 'TfD', selected: true },
+				{ type: 'option', label: 'Merge', value: 'TfM' },
 			],
 		});
 		this.fieldset.append({
@@ -788,7 +790,7 @@ class Tfd extends XfdMode {
 		}
 		// Modules can't be tagged, TfD instructions are to place on /doc subpage
 		this.params.scribunto = mw.config.get('wgPageContentModel') === 'Scribunto';
-		if (this.params.xfdcat === 'tfm') {
+		if (this.params.xfdcat === 'TfM') {
 			this.params.otherTemplateName = (this.params.scribunto ? 'Module:' : 'Template:') + this.params.tfdtarget;
 		}
 	}
@@ -807,7 +809,7 @@ class Tfd extends XfdMode {
 	}
 
 	tagPage() {
-		return this.params.xfdcat === 'tfm' ? this.tagPagesForMerge() : this.tagPageForDeletion();
+		return this.params.xfdcat === 'TfM' ? this.tagPagesForMerge() : this.tagPageForDeletion();
 	}
 
 	// One of the oddities due to our choice of not relying on the local time.
@@ -960,7 +962,7 @@ class Tfd extends XfdMode {
 			pageobj.setPageText(text);
 			pageobj.setEditSummary(
 				'Adding ' +
-					(params.xfdcat === 'tfd' ? 'deletion nomination' : 'merge listing') +
+					(params.xfdcat === 'TfD' ? 'deletion nomination' : 'merge listing') +
 					' of [[:' +
 					Morebits.pageNameNorm +
 					']].'
@@ -1032,7 +1034,7 @@ class Tfd extends XfdMode {
 			// Expiry (note: mb.w.api delete params with value false)
 			watchlistexpiry: watchPref !== 'default' && watchPref !== 'yes' && watchPref,
 		};
-		if (params.xfdcat === 'tfm') {
+		if (params.xfdcat === 'TfM') {
 			// Watch other module too
 			watch_query.titles.push(params.otherTemplateName);
 		}
@@ -1050,7 +1052,7 @@ class Tfd extends XfdMode {
 
 	getNotifyText(): string {
 		let text = `{{subst:tfd notice`;
-		if (this.params.xfdcat === 'tfm') {
+		if (this.params.xfdcat === 'TfM') {
 			text = '\n{{subst:Tfm notice|2=' + this.params.tfdtarget;
 		}
 		text += `|1=${Morebits.pageNameNorm}}} ~~~~`;
@@ -1060,7 +1062,7 @@ class Tfd extends XfdMode {
 	getUserspaceLoggingExtraInfo() {
 		let params = this.params,
 			text = '';
-		if (params.xfdcat === 'tfm') {
+		if (params.xfdcat === 'TfM') {
 			text += ' (merge)';
 			if (params.tfdtarget) {
 				var contentModel = mw.config.get('wgPageContentModel') === 'Scribunto' ? 'Module:' : 'Template:';
@@ -1076,7 +1078,7 @@ class Tfd extends XfdMode {
 }
 
 class Ffd extends XfdMode {
-	static venueCode = 'ffd';
+	static venueCode = 'FfD';
 	static venueLabel = 'FfD (Files for discussion)';
 
 	static isDefaultChoice() {
@@ -1180,7 +1182,7 @@ class Ffd extends XfdMode {
 }
 
 class Cfd extends XfdMode {
-	static venueCode = 'cfd';
+	static venueCode = 'CfD';
 	static venueLabel = 'CfD (Categories for discussion)';
 
 	static isDefaultChoice() {
@@ -1213,15 +1215,15 @@ class Cfd extends XfdMode {
 			name: 'xfdcat',
 			list: isCategory
 				? [
-						{ type: 'option', label: 'Deletion', value: 'cfd', selected: true },
-						{ type: 'option', label: 'Merge', value: 'cfm' },
-						{ type: 'option', label: 'Renaming', value: 'cfr' },
-						{ type: 'option', label: 'Split', value: 'cfs' },
-						{ type: 'option', label: 'Convert into article', value: 'cfc' },
+						{ type: 'option', label: 'Deletion', value: 'CfD', selected: true },
+						{ type: 'option', label: 'Merge', value: 'CfM' },
+						{ type: 'option', label: 'Renaming', value: 'CfR' },
+						{ type: 'option', label: 'Split', value: 'CfS' },
+						{ type: 'option', label: 'Convert into article', value: 'CfC' },
 				  ]
 				: [
-						{ type: 'option', label: 'Stub Deletion', value: 'sfd-t', selected: true },
-						{ type: 'option', label: 'Stub Renaming', value: 'sfr-t' },
+						{ type: 'option', label: 'Stub Deletion', value: 'SfD-t', selected: true },
+						{ type: 'option', label: 'Stub Renaming', value: 'SfR-t' },
 				  ],
 			event: function (e) {
 				var value = e.target.value,
@@ -1229,19 +1231,19 @@ class Cfd extends XfdMode {
 					cfdtarget2 = e.target.form.cfdtarget2;
 
 				// update enabled status
-				cfdtarget.disabled = value === 'cfd' || value === 'sfd-t';
+				cfdtarget.disabled = value === 'CfD' || value === 'SfD-t';
 
 				if (isCategory) {
 					// update label
-					if (value === 'cfs') {
+					if (value === 'CfS') {
 						Morebits.quickForm.setElementLabel(cfdtarget, 'Target categories: ');
-					} else if (value === 'cfc') {
+					} else if (value === 'CfC') {
 						Morebits.quickForm.setElementLabel(cfdtarget, 'Target article: ');
 					} else {
 						Morebits.quickForm.setElementLabel(cfdtarget, 'Target category: ');
 					}
 					// add/remove extra input box
-					if (value === 'cfs') {
+					if (value === 'CfS') {
 						if (cfdtarget2) {
 							cfdtarget2.disabled = false;
 							$(cfdtarget2).show();
@@ -1284,13 +1286,13 @@ class Cfd extends XfdMode {
 		}
 		// Used for customized actions in edit summaries and the notification template
 		let summaryActions = {
-			'cfd': 'deletion',
-			'sfd-t': 'deletion',
-			'cfm': 'merging',
-			'cfr': 'renaming',
-			'sfr-t': 'renaming',
-			'cfs': 'splitting',
-			'cfc': 'conversion',
+			'CfD': 'deletion',
+			'SfD-t': 'deletion',
+			'CfM': 'merging',
+			'CfR': 'renaming',
+			'SfR-t': 'renaming',
+			'CfS': 'splitting',
+			'CfC': 'conversion',
 		};
 		this.params.action = summaryActions[this.params.xfdcat];
 		this.params.stub = mw.config.get('wgNamespaceNumber') !== 14;
@@ -1319,15 +1321,15 @@ class Cfd extends XfdMode {
 			var text = pageobj.getPageText();
 			params.tagText =
 				makeTemplate('subst:' + params.xfdcat, {
-					1: params.cfdtarget, // for cfm, cfr, cfc, cfs, sfr-t
-					2: params.cfdtarget2, // for cfs
+					1: params.cfdtarget, // for CfM, CfR, CfC, CfS, SfR-t
+					2: params.cfdtarget2, // for CfS
 				}) + '\n';
 
 			var editsummary =
 				(params.stub ? 'Stub template' : 'Category') +
 				' being considered for ' +
 				params.action +
-				(params.xfdcat === 'cfc' ? ' to an article' : '') +
+				(params.xfdcat === 'CfC' ? ' to an article' : '') +
 				'; see [[:' +
 				params.discussionpage +
 				']].';
@@ -1397,11 +1399,11 @@ class Cfd extends XfdMode {
 	getUserspaceLoggingExtraInfo() {
 		let params = this.params,
 			text = '';
-		text += ' (' + toTLACase(params.xfdcat) + ')';
+		text += ' (' + params.xfdcat + ')';
 		if (params.cfdtarget) {
 			var categoryOrTemplate = params.xfdcat.charAt(0) === 's' ? 'Template:' : ':Category:';
 			text += '; ' + params.action + ' to [[' + categoryOrTemplate + params.cfdtarget + ']]';
-			if (params.xfdcat === 'cfs' && params.cfdtarget2) {
+			if (params.xfdcat === 'CfS' && params.cfdtarget2) {
 				text += ', [[' + categoryOrTemplate + params.cfdtarget2 + ']]';
 			}
 		}
@@ -1410,7 +1412,7 @@ class Cfd extends XfdMode {
 }
 
 class Cfds extends XfdMode {
-	static venueCode = 'cfds';
+	static venueCode = 'CfDS';
 	static venueLabel = 'CfDS (Categories for speedy renaming)';
 
 	getMenuTooltip(): string {
@@ -1527,7 +1529,7 @@ class Cfds extends XfdMode {
 	getUserspaceLoggingExtraInfo() {
 		let params = this.params,
 			text = '';
-		text += ' (' + toTLACase(params.xfdcat) + ')';
+		text += ' (' + params.xfdcat + ')';
 		// Ensure there's more than just 'Category:'
 		if (params.cfdstarget && params.cfdstarget.length > 9) {
 			text += '; New name: [[:' + params.cfdstarget + ']]';
@@ -1537,7 +1539,7 @@ class Cfds extends XfdMode {
 }
 
 class Mfd extends XfdMode {
-	static venueCode = 'mfd';
+	static venueCode = 'mfD';
 	static venueLabel = 'MfD (Miscellany for deletion)';
 
 	static isDefaultChoice() {
@@ -1729,7 +1731,7 @@ class Mfd extends XfdMode {
 }
 
 class Rfd extends XfdMode {
-	static venueCode = 'rfd';
+	static venueCode = 'RfD';
 	static venueLabel = 'RfD (Redirects for discussion)';
 
 	static isDefaultChoice() {
@@ -1927,7 +1929,7 @@ class Rfd extends XfdMode {
 }
 
 class Rm extends XfdMode {
-	static venueCode = 'rm';
+	static venueCode = 'RM';
 	static venueLabel = 'RM (Requested moves)';
 
 	getFieldsetLabel() {
