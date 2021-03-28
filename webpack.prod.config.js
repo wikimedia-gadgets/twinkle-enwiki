@@ -10,7 +10,6 @@ module.exports = {
 			{
 				test: /\.ts$/,
 				loader: 'ts-loader',
-				exclude: /node_modules/, // XXX: won't this exclude twinkle-core ?
 				options: {
 					// disable type checker - we will use it in fork plugin
 					transpileOnly: true,
@@ -25,7 +24,7 @@ module.exports = {
 		// new ForkTsCheckerWebpackPlugin()
 	],
 	output: {
-		filename: 'bundle.js',
+		filename: 'twinkle.js',
 		path: path.resolve(__dirname, 'build'),
 	},
 };

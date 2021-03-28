@@ -1,3 +1,5 @@
+const path = require('path');
+
 const OUTPUT_DIR = './build';
 const OUTPUT_FILE = './build/bundle.js';
 
@@ -9,7 +11,11 @@ const header = `/*  ____________________________________________________________
  * |_______________________________________________________________________________|
  *
  * Built from source code at GitHub repository [https://github.com/wikimedia-gadgets/twinkle-enwiki]
- * All changes should be made in the repository, otherwise they will be lost.
+ * All changes should be made in the repository. Please do not attempt to edit this file directly.
+ * The latest edit summary on this page includes the commit hash of the repository from which
+ * the build was generated. You can browse the repo at that point in time using this link:
+ * https://github.com/wikimedia-gadgets/twinkle-enwiki/commit/<COMMIT_HASH> after replacing the 
+ * placeholder at the end.  
  */
 /* <nowiki> */
 `;
@@ -27,6 +33,9 @@ module.exports = function (grunt) {
 		},
 
 		// Escape any nowiki tags in code so they don't break the on-wiki gadget file
+		// There's no point in writing nowiki tags as "<no" + "wiki>" in source files
+		// as Webpack's Terser plugin will optimise away the string concatenation giving
+		// a functional nowiki tag. So we must do this *after* webpack minimisation.
 		replace: {
 			dist: {
 				options: {
@@ -65,12 +74,25 @@ module.exports = function (grunt) {
 				dest: OUTPUT_FILE,
 			},
 		},
+
+		// Copy other files to build directory (which don't need to be compiled)
+		copy: {
+			main: {
+				files: [
+					{ src: '../twinkle-core/morebits/morebits.js', dest: 'build/morebits.js' },
+					{ src: '../twinkle-core/morebits/morebits.css', dest: 'build/morebits.css' },
+					{ src: './css/twinkle.css', dest: 'build/twinkle.css' },
+					{ src: './css/twinkle-pagestyles.css', dest: 'build/twinkle-pagestyles.css' },
+				],
+			},
+		},
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-webpack');
 	grunt.loadNpmTasks('grunt-replace');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
-	grunt.registerTask('build', ['clean', 'webpack', 'replace', 'concat']);
+	grunt.registerTask('build', ['clean', 'webpack', 'replace', 'concat', 'copy']);
 };
