@@ -11,7 +11,7 @@ export class Protect extends ProtectCore {
 	getProtectionLevels() {
 		return $.extend(true, super.getProtectionLevels(), {
 			extendedconfirmed: {
-				label: 'Extended confirmed',
+				label: 'Extended confirmed users',
 				weight: 20,
 				types: ['edit', 'move', 'create'],
 			},

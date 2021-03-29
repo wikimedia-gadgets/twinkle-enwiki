@@ -1,5 +1,6 @@
-import { Twinkle, loadMessages, init } from './core';
+import { Twinkle, loadMessages, init, loadAdditionalMediaWikiMessages } from './core';
 import messages from './messages.json';
+import mwMessageList from './mw-messages';
 
 // import modules
 import { Xfd } from './xfd';
@@ -22,6 +23,7 @@ import { BatchUndelete } from './batchundelete';
 // no customisation; import directly from core
 import { DiffCore as Diff } from './core';
 
+// register some globals for debugging, as per twinkle v2
 import './globals';
 
 // Check if account is experienced enough to use Twinkle
@@ -34,6 +36,8 @@ loadMessages(messages);
 Twinkle.userAgent = 'Twinkle ([[w:en:WP:TW]])';
 Twinkle.changeTags = 'twinkle';
 Twinkle.summaryAd = ' ([[WP:TW|TW]])';
+
+Twinkle.preModuleInitHooks = [() => loadAdditionalMediaWikiMessages(mwMessageList)];
 
 Twinkle.registeredModules = [
 	Xfd,
