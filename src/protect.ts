@@ -35,54 +35,98 @@ export class Protect extends ProtectCore {
 				label: 'Full protection',
 				list: [
 					{ label: 'Generic (full)', value: 'pp-protected' },
-					{ label: 'Content dispute/edit warring (full)', value: 'pp-dispute' },
-					{ label: 'Persistent vandalism (full)', value: 'pp-vandalism' },
-					{ label: 'User talk of blocked user (full)', value: 'pp-usertalk' },
+					{ label: 'Content dispute/edit warring (full)', value: 'pp-dispute', reason: 'Content dispute/edit warring' },
+					{ label: 'Persistent vandalism (full)', value: 'pp-vandalism', reason: 'Persistent [[WP:VAND|vandalism]]' },
+					{
+						label: 'User talk of blocked user (full)',
+						value: 'pp-usertalk',
+						reason: 'Inappropriate use of user talk page while blocked',
+					},
 				],
 			},
 			{
 				label: 'Template protection',
-				list: [{ label: 'Highly visible template (TE)', value: 'pp-template' }],
+				list: [
+					{ label: 'Highly visible template (TE)', value: 'pp-template', reason: '[[WP:HIGHRISK|High-risk template]]' },
+				],
 			},
 			{
 				label: 'Extended confirmed protection',
 				list: [
-					{ label: 'Arbitration enforcement (ECP)', selected: true, value: 'pp-30-500-arb' },
-					{ label: 'Persistent vandalism (ECP)', value: 'pp-30-500-vandalism' },
-					{ label: 'Disruptive editing (ECP)', value: 'pp-30-500-disruptive' },
-					{ label: 'BLP policy violations (ECP)', value: 'pp-30-500-blp' },
-					{ label: 'Sockpuppetry (ECP)', value: 'pp-30-500-sock' },
+					{
+						label: 'Arbitration enforcement (ECP)',
+						selected: true,
+						value: 'pp-30-500-arb',
+						reason: '[[WP:30/500|Arbitration enforcement]]',
+					},
+					{
+						label: 'Persistent vandalism (ECP)',
+						value: 'pp-30-500-vandalism',
+						reason: 'Persistent [[WP:VAND|vandalism]]',
+					},
+					{
+						label: 'Disruptive editing (ECP)',
+						value: 'pp-30-500-disruptive',
+						reason: 'Persistent [[Wikipedia:Disruptive editing|disruptive editing]]',
+					},
+					{ label: 'BLP policy violations (ECP)', value: 'pp-30-500-blp', reason: '[[WP:BLP|BLP]] policy violations' },
+					{ label: 'Sockpuppetry (ECP)', value: 'pp-30-500-sock', reason: 'Persistent [[WP:SOCK|sockpuppetry]]' },
 				],
 			},
 			{
 				label: 'Semi-protection',
 				list: [
 					{ label: 'Generic (semi)', value: 'pp-semi-protected' },
-					{ label: 'Persistent vandalism (semi)', selected: true, value: 'pp-semi-vandalism' },
-					{ label: 'Disruptive editing (semi)', value: 'pp-semi-disruptive' },
-					{ label: 'Adding unsourced content (semi)', value: 'pp-semi-unsourced' },
-					{ label: 'BLP policy violations (semi)', value: 'pp-semi-blp' },
-					{ label: 'Sockpuppetry (semi)', value: 'pp-semi-sock' },
-					{ label: 'User talk of blocked user (semi)', value: 'pp-semi-usertalk' },
+					{
+						label: 'Persistent vandalism (semi)',
+						selected: true,
+						value: 'pp-semi-vandalism',
+						reason: 'Persistent [[WP:VAND|vandalism]]',
+					},
+					{
+						label: 'Disruptive editing (semi)',
+						value: 'pp-semi-disruptive',
+						reason: 'Persistent [[Wikipedia:Disruptive editing|disruptive editing]]',
+					},
+					{
+						label: 'Adding unsourced content (semi)',
+						value: 'pp-semi-unsourced',
+						reason: 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]',
+					},
+					{ label: 'BLP policy violations (semi)', value: 'pp-semi-blp', reason: '[[WP:BLP|BLP]] policy violations' },
+					{ label: 'Sockpuppetry (semi)', value: 'pp-semi-sock', reason: 'Persistent [[WP:SOCK|sockpuppetry]]' },
+					{
+						label: 'User talk of blocked user (semi)',
+						value: 'pp-semi-usertalk',
+						reason: 'Inappropriate use of user talk page while blocked',
+					},
 				],
 			},
 			{
 				label: 'Pending changes',
 				list: [
 					{ label: 'Generic (PC)', value: 'pp-pc-protected' },
-					{ label: 'Persistent vandalism (PC)', value: 'pp-pc-vandalism' },
-					{ label: 'Disruptive editing (PC)', value: 'pp-pc-disruptive' },
-					{ label: 'Adding unsourced content (PC)', value: 'pp-pc-unsourced' },
-					{ label: 'BLP policy violations (PC)', value: 'pp-pc-blp' },
+					{ label: 'Persistent vandalism (PC)', value: 'pp-pc-vandalism', reason: 'Persistent [[WP:VAND|vandalism]]' },
+					{
+						label: 'Disruptive editing (PC)',
+						value: 'pp-pc-disruptive',
+						reason: 'Persistent [[Wikipedia:Disruptive editing|disruptive editing]]',
+					},
+					{
+						label: 'Adding unsourced content (PC)',
+						value: 'pp-pc-unsourced',
+						reason: 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]',
+					},
+					{ label: 'BLP policy violations (PC)', value: 'pp-pc-blp', reason: '[[WP:BLP|BLP]] policy violations' },
 				],
 			},
 			{
 				label: 'Move protection',
 				list: [
 					{ label: 'Generic (move)', value: 'pp-move' },
-					{ label: 'Dispute/move warring (move)', value: 'pp-move-dispute' },
-					{ label: 'Page-move vandalism (move)', value: 'pp-move-vandalism' },
-					{ label: 'Highly visible page (move)', value: 'pp-move-indef' },
+					{ label: 'Dispute/move warring (move)', value: 'pp-move-dispute', reason: 'Page title dispute/move warring' },
+					{ label: 'Page-move vandalism (move)', value: 'pp-move-vandalism', reason: 'Page-move vandalism' },
+					{ label: 'Highly visible page (move)', value: 'pp-move-indef', reason: 'Highly visible page' },
 				],
 			},
 		].filter((type) => {
@@ -101,9 +145,9 @@ export class Protect extends ProtectCore {
 				label: 'Create protection',
 				list: [
 					{ label: 'Generic ({{pp-create}})', value: 'pp-create' },
-					{ label: 'Offensive name', value: 'pp-create-offensive' },
-					{ label: 'Repeatedly recreated', selected: true, value: 'pp-create-salt' },
-					{ label: 'Recently deleted BLP', value: 'pp-create-blp' },
+					{ label: 'Offensive name', value: 'pp-create-offensive', reason: 'Offensive name' },
+					{ label: 'Repeatedly recreated', selected: true, value: 'pp-create-salt', reason: 'Repeatedly recreated' },
+					{ label: 'Recently deleted BLP', value: 'pp-create-blp', reason: 'Recently deleted [[WP:BLP|BLP]]' },
 				],
 			},
 		];
