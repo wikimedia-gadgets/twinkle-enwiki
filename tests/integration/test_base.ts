@@ -1,5 +1,11 @@
-export const fs = require('fs');
-export const { mwn } = require('mwn');
+import * as fs from 'fs';
+import * as diff from 'diff';
+import { mwn } from 'mwn';
+import { MwnError } from 'mwn/build/error';
+import { LogEvent } from 'mwn/build/user';
+import { logprop } from 'mwn/build/page';
+
+export { fs, mwn }; // re-export
 
 // External API clients to make and observe changes
 let mwnConfig = {
@@ -28,6 +34,9 @@ export async function setupMWBrowser(page) {
 	]);
 }
 
+/**
+ * Do not use unless strictly necessary
+ */
 export async function loadExpectInBrowser() {
 	// Also load expect in the browser context so that we can make expect assertions in browser context too
 	// However, note that these if these fail, no meaningful logging error messages may be displayed in the
@@ -51,7 +60,7 @@ export async function loadTwinkle() {
 	// we can do without the css peer gadget
 	await page.addStyleTag({
 		content:
-			(await readFile(twinkleCore + 'morebits/morebits.css')) + '\n' + (await readFile(repoRoot + 'src/twinkle.css')),
+			(await readFile(twinkleCore + 'morebits/morebits.css')) + '\n' + (await readFile(repoRoot + 'css/twinkle.css')),
 	});
 	await page.evaluate(await readFile(twinkleCore + 'morebits/morebits.js'));
 	await page.evaluate(await readFile(repoRoot + 'build/bundle.js'));
@@ -59,9 +68,11 @@ export async function loadTwinkle() {
 
 export class TwinkleModuleTest {
 	moduleName: string;
+
 	constructor(moduleName) {
 		this.moduleName = moduleName;
 	}
+
 	async open(load = true) {
 		if (load) {
 			await loadTwinkle();
@@ -76,8 +87,83 @@ export class TwinkleModuleTest {
 	async submit() {
 		// Assumes only one quickForm is open at a time
 		await page.click('.morebits-dialog-buttons button');
-		await page.waitForSelector('.morebits_action_complete');
+
+		// Wait until action complete message appears, or till 10 seconds
+		// have passed, whichever is earlier.
+		// The 10-second hack is a temporary necessity as all modules don't have
+		// a functional action complete message display.
+		await Promise.race([page.waitForSelector('.morebits_action_complete'), bot.sleep(10000)]);
 	}
+}
+
+export async function lastDiff(page: string): Promise<LastDiff> {
+	return bot
+		.read(page, {
+			rvlimit: 2,
+			rvprop: 'content|timestamp|comment|tags',
+		})
+		.then((pg) => {
+			if (pg.missing) {
+				return Promise.reject(new MwnError.MissingPage());
+			}
+			if (pg.revisions.length === 1) {
+				// new page creation
+				pg.revisions.push({ content: '' }); // pretend the older version is empty string
+			}
+			// revisions[0] is the newer version
+			let diffLines = diff.diffLines(pg.revisions[1].content, pg.revisions[0].content);
+			return new LastDiff({
+				addedLines: diffLines.filter((d) => d.added),
+				removedLines: diffLines.filter((d) => d.removed),
+				summary: pg.revisions[0].comment,
+				tags: pg.revisions[0].tags,
+				content: pg.revisions[0].content,
+			});
+		});
+}
+
+export class LastDiff {
+	addedLines: { added: true; count: number; value: string }[];
+	removedLines: { removed: true; count: number; value: string }[];
+	summary: string;
+	tags: string[];
+	content: string;
+
+	constructor({ addedLines, removedLines, summary, tags, content }) {
+		Object.assign(this, { addedLines, removedLines, summary, tags, content });
+	}
+
+	expectToBeTwinkleEdit() {
+		expect(this.tags).toEqual(['twinkle']);
+		return this;
+	}
+
+	expectAddedLineToMatch(matcher: string | RegExp) {
+		for (let line of this.addedLines) {
+			try {
+				expect(line.value).toMatch(matcher);
+				return this;
+			} catch {}
+		}
+		// if we reach here, then none of the lines matched
+		throw new Error('none of the lines added matched ' + matcher);
+	}
+
+	expectRemovedLineToMatch(matcher: string | RegExp) {
+		for (let line of this.removedLines) {
+			try {
+				expect(line.value).toMatch(matcher);
+				return this; // if matched, return immediately
+			} catch {}
+		}
+		// if we reach here, then none of the lines matched
+		throw new Error('none of the lines removed matched ' + matcher);
+	}
+}
+
+export async function lastLog(page: string, props?: logprop[]): Promise<LogEvent> {
+	const logs = await new bot.page(page).logs(props, 1);
+	return logs[0];
 }
 
 export async function createRandomPage(prefix, content?, summary?) {
