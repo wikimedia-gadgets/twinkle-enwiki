@@ -1,4 +1,5 @@
 import { NS_MAIN, ProtectCore } from './core';
+import { hatnoteRegex } from './common';
 
 export class Protect extends ProtectCore {
 	footerlinks = {
@@ -27,6 +28,19 @@ export class Protect extends ProtectCore {
 			},
 		});
 	}
+
+	existingTagRegex = /\s*(?:<noinclude>)?\s*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
+
+	disableTaggingOnRedirectTemplateRegex = /{{(?:redr|this is a redirect|r(?:edirect)?(?:.?cat.*)?[ _]?sh)/i;
+
+	insertTagIntoPage(text: string, tag: string): string {
+		return new Morebits.wikitext.page(text).insertAfterTemplates(tag, hatnoteRegex).getText();
+	}
+
+	existingRequestRegex = new RegExp(
+		'===\\s*(\\[\\[)?\\s*:?\\s*' + Morebits.string.escapeRegExp(Morebits.pageNameNorm) + '\\s*(\\]\\])?\\s*===',
+		'm'
+	);
 
 	getProtectionPresets(): quickFormElementData[] {
 		return [
