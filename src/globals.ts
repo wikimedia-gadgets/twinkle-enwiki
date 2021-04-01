@@ -2,11 +2,11 @@
  * Allow global access for certain objects for debugging and console-based testing
  */
 
-import { msg, Twinkle, TwinkleModule, Api, Page } from './core';
+import { msg, Twinkle, registerModule, Api, Page } from './core';
 
 window.Twinkle = Twinkle;
 
-Twinkle.registerModule = TwinkleModule.register;
+Twinkle.registerModule = registerModule;
 Twinkle.msg = msg;
 Twinkle.page = Page;
 Twinkle.api = Api;
