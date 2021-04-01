@@ -1,4 +1,4 @@
-import { Twinkle, loadMessages, init, loadAdditionalMediaWikiMessages } from './core';
+import { Twinkle, loadMessages, init, loadAdditionalMediaWikiMessages, SiteConfig } from './core';
 import messages from './messages.json';
 import mwMessageList from './mw-messages';
 
@@ -58,5 +58,7 @@ Twinkle.registeredModules = [
 	Unlink,
 	BatchUndelete,
 ];
+
+SiteConfig.permalinkSpecialPageName = 'Special:Permalink';
 
 init();

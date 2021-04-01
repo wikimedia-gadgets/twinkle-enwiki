@@ -1,4 +1,4 @@
-import { Twinkle, TwinkleModule, getPref, addPortletLink } from './core';
+import { Twinkle, TwinkleModule, getPref, addPortletLink, NS_USER_TALK } from './core';
 
 export class Shared extends TwinkleModule {
 	moduleName = 'shared';
@@ -6,7 +6,7 @@ export class Shared extends TwinkleModule {
 
 	constructor() {
 		super();
-		if (mw.config.get('wgNamespaceNumber') === 3 && mw.util.isIPAddress(mw.config.get('wgTitle'))) {
+		if (mw.config.get('wgNamespaceNumber') === NS_USER_TALK && mw.util.isIPAddress(mw.config.get('wgTitle'))) {
 			addPortletLink(
 				function () {
 					Shared.callback();
