@@ -80,9 +80,7 @@ const redirectTagList: tagListType = {
 					{
 						name: 'altLangInfo',
 						type: 'div',
-						label: $.parseHTML(
-							'<p>For a list of language codes, see <a href="/wiki/Wp:Template_messages/Redirect_language_codes">Wikipedia:Template messages/Redirect language codes</a></p>'
-						) as HTMLElement[],
+						label: 'For a list of language codes, see [[Wikipedia:Template messages/Redirect language codes]]',
 					},
 				],
 			},
