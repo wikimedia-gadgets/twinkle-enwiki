@@ -1,4 +1,4 @@
-import { Twinkle, loadMessages, init, loadAdditionalMediaWikiMessages, SiteConfig } from './core';
+import { Twinkle, addMessages, init, loadAdditionalMediaWikiMessages, SiteConfig } from './core';
 import messages from './messages.json';
 import mwMessageList from './mw-messages';
 
@@ -31,8 +31,6 @@ if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirm
 	throw new Error('Twinkle: forbidden!');
 }
 
-loadMessages(messages);
-
 Twinkle.userAgent = 'Twinkle ([[w:en:WP:TW]])';
 Twinkle.changeTags = 'twinkle';
 Twinkle.summaryAd = ' ([[WP:TW|TW]])';
@@ -62,3 +60,5 @@ Twinkle.registeredModules = [
 SiteConfig.permalinkSpecialPageName = 'Special:Permalink';
 
 init();
+
+addMessages(messages);
