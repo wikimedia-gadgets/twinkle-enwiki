@@ -43,6 +43,7 @@ export class Block extends BlockCore {
 			nonstandard: true,
 			reason: '{{CheckUser block}}',
 			sig: '~~~~',
+			requireGroup: 'checkuser',
 		},
 		'checkuserblock-account': {
 			autoblock: true,
@@ -52,6 +53,7 @@ export class Block extends BlockCore {
 			nonstandard: true,
 			reason: '{{checkuserblock-account}}',
 			sig: '~~~~',
+			requireGroup: 'checkuser',
 		},
 		'checkuserblock-wide': {
 			forAnonOnly: true,
@@ -59,6 +61,7 @@ export class Block extends BlockCore {
 			nonstandard: true,
 			reason: '{{checkuserblock-wide}}',
 			sig: '~~~~',
+			requireGroup: 'checkuser',
 		},
 		'colocationwebhost': {
 			expiry: '1 year',
@@ -74,6 +77,7 @@ export class Block extends BlockCore {
 			nonstandard: true,
 			reason: '{{OversightBlock}}',
 			sig: '~~~~',
+			requireGroup: 'oversight',
 		},
 		'school block': {
 			forAnonOnly: true,
@@ -95,6 +99,7 @@ export class Block extends BlockCore {
 			nocreate: true,
 			nonstandard: true,
 			forAnonOnly: true,
+			forRangeOnly: true,
 			sig: '~~~~',
 		},
 		'tor': {
@@ -627,6 +632,9 @@ export class Block extends BlockCore {
 		},
 	];
 
+	// disable Gadget/Gadget definition and their talk namespaces
+	disablePartialBlockNamespaces = [2300, 2301, 2302, 2303];
+
 	toggle_see_alsos(e: QuickFormEvent) {
 		let checkbox = e.target;
 		var reason = checkbox.form.reason.value.replace(
@@ -648,6 +656,91 @@ export class Block extends BlockCore {
 		} else {
 			checkbox.form.reason.value = reason + '; see also ' + seeAlsoMessage;
 		}
+	}
+
+	// XXX: partially move to twinkle-core
+	getBlockNoticeWikitextAndSummary(params) {
+		var text = '{{',
+			settings = this.blockPresetsInfo[params.template];
+		if (!settings.nonstandard) {
+			text += 'subst:' + params.template;
+			if (params.article && settings.pageParam) {
+				text += '|page=' + params.article;
+			}
+			if (params.dstopic) {
+				text += '|topic=' + params.dstopic;
+			}
+
+			if (!/te?mp|^\s*$|min/.exec(params.expiry)) {
+				if (params.indefinite) {
+					text += '|indef=yes';
+				} else if (!params.blank_duration && !new Morebits.date(params.expiry).isValid()) {
+					// Block template wants a duration, not date
+					text += '|time=' + params.expiry;
+				}
+			}
+
+			if (!this.isRegistered && !params.hardblock) {
+				text += '|anon=yes';
+			}
+
+			if (params.reason) {
+				text += '|reason=' + params.reason;
+			}
+			if (params.disabletalk) {
+				text += '|notalk=yes';
+			}
+
+			// Currently, all partial block templates are "standard"
+			// Building the template, however, takes a fair bit of logic
+			if (params.partial) {
+				if (params.pagerestrictions.length || params.namespacerestrictions.length) {
+					text += '|area=' + (params.indefinite ? 'certain ' : 'from certain ');
+					if (params.pagerestrictions.length) {
+						text +=
+							'pages (' +
+							mw.language.listToText(
+								params.pagerestrictions.map((p) => {
+									return '[[:' + p + ']]';
+								})
+							);
+						text += params.namespacerestrictions.length ? ') and certain ' : ')';
+					}
+					if (params.namespacerestrictions.length) {
+						// 1 => Talk, 2 => User, etc.
+						var namespaceNames = params.namespacerestrictions.map((id) => {
+							return this.menuFormattedNamespaces[id];
+						});
+						text += '[[Wikipedia:Namespace|namespaces]] (' + mw.language.listToText(namespaceNames) + ')';
+					}
+				} else if (params.area) {
+					text += '|area=' + params.area;
+				} else {
+					if (params.noemail) {
+						text += '|email=yes';
+					}
+					if (params.nocreate) {
+						text += '|accountcreate=yes';
+					}
+				}
+			}
+		} else {
+			text += params.template;
+		}
+
+		if (settings.sig) {
+			text += '|sig=' + settings.sig;
+		}
+		text += '}}';
+
+		// build the edit summary
+		var summary = params.messageData.summary as string;
+		if (params.messageData.suppressArticleInSummary !== true && params.article) {
+			summary += ' on [[:' + params.article + ']]';
+		}
+		summary += '.';
+
+		return [text, summary] as [string, string];
 	}
 
 	dsinfo = {
