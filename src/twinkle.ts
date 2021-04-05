@@ -35,6 +35,8 @@ Twinkle.userAgent = 'Twinkle ([[w:en:WP:TW]])';
 Twinkle.changeTags = 'twinkle';
 Twinkle.summaryAd = ' ([[WP:TW|TW]])';
 
+Twinkle.messageOverrides = messages;
+
 Twinkle.preModuleInitHooks = [() => loadAdditionalMediaWikiMessages(mwMessageList)];
 
 Twinkle.registeredModules = [
@@ -60,5 +62,3 @@ Twinkle.registeredModules = [
 SiteConfig.permalinkSpecialPageName = 'Special:Permalink';
 
 init();
-
-addMessages(messages);
