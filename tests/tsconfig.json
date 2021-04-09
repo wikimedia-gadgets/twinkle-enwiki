@@ -5,12 +5,12 @@
 		"noEmit": true,
 		"target": "ES2019",
 		"moduleResolution": "Node",
-		"lib": ["es6"]
+		"lib": ["es6", "dom"]
 	},
 	"include": [
 		"./**/*",
-		"../node_modules/types-mediawiki/index.d.ts",
-		"../node_modules/expect-playwright/global.d.ts",
-		"../node_modules/jest-playwright-preset/types/global.d.ts"
+		"../node_modules/types-mediawiki",
+		"../node_modules/expect-playwright",
+		"../node_modules/jest-playwright-preset"
 	]
 }

@@ -4,15 +4,19 @@
 
 import { msg, Twinkle, registerModule, Api, Page } from './core';
 
+// @ts-ignore
 window.Twinkle = Twinkle;
 
-Twinkle.registerModule = registerModule;
-Twinkle.msg = msg;
-Twinkle.page = Page;
-Twinkle.api = Api;
+$.extend(Twinkle, {
+	registerModule,
+	msg,
+	Page,
+	Api,
+});
 
 // Make jQuery Deferred exceptions hit the source map during debugging
 // XXX: there has to be a better way to do this ...
+// @ts-ignore
 if (typeof __webpack_exports__ !== 'undefined') {
 	jQuery.Deferred.exceptionHook = function (err) {
 		throw err;

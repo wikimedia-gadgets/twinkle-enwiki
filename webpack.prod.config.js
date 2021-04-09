@@ -1,5 +1,4 @@
 const path = require('path');
-// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
 	mode: 'production',
@@ -11,7 +10,6 @@ module.exports = {
 				test: /\.ts$/,
 				loader: 'ts-loader',
 				options: {
-					// disable type checker - we will use it in fork plugin
 					transpileOnly: true,
 				},
 			},
@@ -20,9 +18,6 @@ module.exports = {
 	resolve: {
 		extensions: ['.ts'],
 	},
-	plugins: [
-		// new ForkTsCheckerWebpackPlugin()
-	],
 	output: {
 		filename: 'twinkle.js',
 		path: path.resolve(__dirname, 'build'),
