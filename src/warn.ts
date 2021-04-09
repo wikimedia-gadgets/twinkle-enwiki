@@ -1,6 +1,13 @@
-import { Twinkle, WarnCore, obj_entries, warningLevel, arr_includes, warning } from './core';
+import { WarnCore, obj_entries, warningLevel, arr_includes, warning, getPref } from './core';
 
 export class Warn extends WarnCore {
+	footerlinks = {
+		'Choosing a warning level': 'WP:UWUL#Levels',
+		'Warn prefs': 'WP:TW/PREF#warn',
+		'Twinkle help': 'WP:TW/DOC#warn',
+		'Give feedback': 'WT:TW',
+	};
+
 	warningLevels: Record<
 		string,
 		{ label: string; summaryPrefix?: string; selected: (pref: number) => boolean; visible?: () => boolean }
@@ -1194,5 +1201,24 @@ export class Warn extends WarnCore {
 			return summary + ' of [[:User:' + input + ']]';
 		}
 		return super.customiseSummaryWithInput(summary, input, messageData);
+	}
+
+	perWarningNotices(template): JQuery {
+		switch (template) {
+			case 'uw-username':
+				return $(
+					"<div style='color: red;' id='tw-warn-red-notice'>{{uw-username}} should <b>not</b> be used for <b>blatant</b> username policy violations. " +
+						"Blatant violations should be reported directly to UAA (via Twinkle's ARV tab). " +
+						'{{uw-username}} should only be used in edge cases in order to engage in discussion with the user.</div>'
+				);
+			case 'uw-coi-username':
+				return $(
+					"<div style='color: red;' id='tw-warn-red-notice'>{{uw-coi-username}} should <b>not</b> be used for <b>blatant</b> username policy violations. " +
+						"Blatant violations should be reported directly to UAA (via Twinkle's ARV tab). " +
+						'{{uw-coi-username}} should only be used in edge cases in order to engage in discussion with the user.</div>'
+				);
+			default:
+				return $();
+		}
 	}
 }
