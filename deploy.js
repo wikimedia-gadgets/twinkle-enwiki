@@ -20,8 +20,7 @@
  * ---------------------------------------------------------------------------
  * 1) Changes committed and merged to master branch on GitHub repo
  * 2) Currently on master branch, and synced with GitHub repo
- * 3) Version bumped, and that change committed and synced to GitHub repo
- * 3) Run a full build using "npm run build"
+ * 3) Run a full build using "grunt build"
  * When all of the above are done ==> you are ready to proceed with deployment
  *
  * --------------------------------------------------------------------------
@@ -30,7 +29,7 @@
  * Ensure the pre-deployment steps above are completed, unless you are only
  * deploying to the testwiki (test.wikipedia.org). Then, run this script:
  * In the terminal, enter
- *     node bin/deploy.js
+ *     node deploy.js
  * and supply the requested details.
  * Notes:
  * - The default summary if not specified is "Updated from repository"
@@ -47,7 +46,7 @@ const chalk = require('chalk');
 const minimist = require('minimist');
 
 const args = minimist(process.argv.slice(2));
-console.log(args);
+console.log('Entered args', args);
 
 async function prompt(message, type = 'text', initial = '') {
 	let name = String(Math.random());
@@ -56,14 +55,17 @@ async function prompt(message, type = 'text', initial = '') {
 
 class Deploy {
 	deployTargets = [
-		{ file: 'build/twinkle.js', target: 'MediaWiki:Gadget-Twinkle.js' },
-		{ file: 'build/twinkle.css', target: 'MediaWiki:Gadget-Twinkle.css' },
+		{ file: 'build/twinkle.js', target: 'MediaWiki:Gadget-TwinkleV3.js' },
+		{ file: 'build/twinkle.css', target: 'MediaWiki:Gadget-TwinkleV3.css' },
 		{
 			file: 'build/twinkle-pagestyles.css',
-			target: 'MediaWiki:Gadget-Twinkle-pagestyles.css',
+			target: 'MediaWiki:Gadget-Twinkle-pagestylesV3.css',
 		},
-		{ file: 'build/morebits.js', target: 'MediaWiki:Gadget-morebits.js' },
-		{ file: 'build/morebits.css', target: 'MediaWiki:Gadget-morebits.css' },
+		{ file: 'build/morebits.js', target: 'MediaWiki:Gadget-morebitsV3.js' },
+		{
+			file: 'build/morebits.css',
+			target: 'MediaWiki:Gadget-morebitsV3.css',
+		},
 	];
 
 	async deploy() {
@@ -101,7 +103,8 @@ class Deploy {
 	}
 
 	async login() {
-		this.siteCode = args.enwiki ? 'en' : args.testwiki ? 'test' : throw new Error('use either --enwiki or --testwiki');
+		this.siteCode = args.enwiki ? 'en' : args.testwiki ? 'test' : null;
+		if (!this.siteCode) throw new Error('use either --enwiki or --testwiki');
 		this.api.setApiUrl(`https://${this.siteCode}.wikipedia.org/w/api.php`);
 		if (this.usingOAuth) {
 			await this.api.getTokensAndSiteInfo();
@@ -111,11 +114,10 @@ class Deploy {
 	}
 
 	async makeEditSummary() {
-		const version = require('./package.json').version;
 		const sha = execSync('git rev-parse --short HEAD').toString('utf8').trim();
 		const message = await prompt('> Edit summary message (optional): ');
-		this.editSummary = `v${version} at ${sha}: ${message || 'Updated from repository'}`;
-		log(`Edit summary is: "${this.editSummary}"`);
+		this.editSummary = `Commit ${sha}: ${message || 'Updated from repository'}`;
+		console.log(`Edit summary is: "${this.editSummary}"`);
 	}
 
 	async savePages() {
@@ -123,21 +125,19 @@ class Deploy {
 
 		log('yellow', '--- starting deployment ---');
 
-		for (let [file, target] of Object.entries(this.deployTargets)) {
-			let fileText = (await fs.readFile('./build/' + file)).toString();
-			await this.api.save(target, fileText, this.editSummary).then(
-				(response) => {
-					if (response && response.nochange) {
-						log('yellow', `━ No change saving ${file} to ${this.siteCode}:${target}`);
-					} else {
-						log('green', `✔ Successfully saved ${file} to ${this.siteCode}:${target}`);
-					}
-				},
-				(error) => {
-					log('red', `✘ Failed to save ${file} to ${this.siteCode}:${target}`);
-					logError(error);
+		for await (let { file, target } of this.deployTargets) {
+			let fileText = (await fs.readFile(__dirname + '/' + file)).toString();
+			try {
+				const response = await this.api.save(target, fileText, this.editSummary);
+				if (response && response.nochange) {
+					log('yellow', `━ No change saving ${file} to ${this.siteCode}:${target}`);
+				} else {
+					log('green', `✔ Successfully saved ${file} to ${this.siteCode}:${target}`);
 				}
-			);
+			} catch (error) {
+				log('red', `✘ Failed to save ${file} to ${this.siteCode}:${target}`);
+				logError(error);
+			}
 		}
 		log('yellow', '--- end of deployment ---');
 	}
@@ -145,9 +145,11 @@ class Deploy {
 
 function logError(error) {
 	error = error || {};
-	console.log((error.info || 'Unknown error') + '\n', JSON.stringify(error.response || error));
+	console.log((error.info || 'Unknown error') + '\n', error.response || error);
 }
 
 function log(color, ...args) {
-	return chalk[color](...args);
+	console.log(chalk[color](...args));
 }
+
+new Deploy().deploy();

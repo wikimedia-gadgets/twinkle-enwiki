@@ -22,4 +22,7 @@ module.exports = {
 		filename: 'twinkle.js',
 		path: path.resolve(__dirname, 'build'),
 	},
+	performance: {
+		hints: false,
+	},
 };

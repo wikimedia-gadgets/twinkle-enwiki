@@ -1,7 +1,7 @@
 const path = require('path');
 
 const OUTPUT_DIR = './build';
-const OUTPUT_FILE = './build/bundle.js';
+const OUTPUT_FILE = './build/twinkle.js';
 
 const header = `/*  _______________________________________________________________________________
  * |                                                                               |
@@ -14,7 +14,7 @@ const header = `/*  ____________________________________________________________
  * All changes should be made in the repository. Please do not attempt to edit this file directly.
  * The latest edit summary on this page includes the commit hash of the repository from which
  * the build was generated. You can browse the repo at that point in time using this link:
- * https://github.com/wikimedia-gadgets/twinkle-enwiki/commit/<COMMIT_HASH> after replacing the 
+ * https://github.com/wikimedia-gadgets/twinkle-enwiki/tree/<COMMIT_HASH> after replacing the 
  * placeholder at the end.  
  */
 /* <nowiki> */
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
 		// as Webpack's Terser plugin will optimise away the string concatenation giving
 		// a functional nowiki tag. So we must do this *after* webpack minimisation.
 		replace: {
-			dist: {
+			nowiki: {
 				options: {
 					patterns: [
 						{
