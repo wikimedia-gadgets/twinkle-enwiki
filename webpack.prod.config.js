@@ -1,4 +1,5 @@
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
 	mode: 'production',
@@ -21,6 +22,13 @@ module.exports = {
 	output: {
 		filename: 'twinkle.js',
 		path: path.resolve(__dirname, 'build'),
+	},
+	optimization: {
+		minimizer: [
+			new TerserPlugin({
+				extractComments: /@preserve/,
+			}),
+		],
 	},
 	performance: {
 		hints: false,

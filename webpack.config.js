@@ -11,7 +11,6 @@ module.exports = {
 			{
 				test: /\.ts$/,
 				loader: 'ts-loader',
-				// exclude: /node_modules/, // XXX: won't this exclude twinkle-core ?
 				options: {
 					transpileOnly: true,
 				},

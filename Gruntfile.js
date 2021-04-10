@@ -1,5 +1,3 @@
-const path = require('path');
-
 const OUTPUT_DIR = './build';
 const OUTPUT_FILE = './build/twinkle.js';
 
