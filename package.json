@@ -11,7 +11,7 @@
 		"lint:fix": "eslint . --fix",
 		"build": "grunt build",
 		"quickbuild": "webpack",
-		"start": "node server.js",
+		"start": "node scripts/server.js",
 		"test:prod": "webpack && jest",
 		"test": "env DEBUG=true webpack && jest -i",
 		"test:unit": "webpack && jest --selectProjects unit",
