@@ -50,10 +50,15 @@ async function readFile(path) {
 	return (await fs.promises.readFile(path)).toString();
 }
 
-export async function loadTwinkle() {
-	const twinkleCore = __dirname + '/../../../twinkle-core/';
-	const repoRoot = __dirname + '/../../';
+const twinkleCore = __dirname + '/../../../twinkle-core/';
+const repoRoot = __dirname + '/../../';
 
+// Load just morebits js code for the morebits tests
+export async function loadMorebits() {
+	await page.evaluate(await readFile(twinkleCore + 'morebits/morebits.js'));
+}
+
+export async function loadTwinkle() {
 	await page.evaluate(() => {
 		return mw.loader.using(['jquery.ui']);
 	});
