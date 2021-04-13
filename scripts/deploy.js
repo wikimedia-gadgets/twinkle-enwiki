@@ -91,16 +91,19 @@ class Deploy {
 			if (!config.password) {
 				config.password = await prompt('> Enter bot password', 'password');
 			}
-			if (args.testwiki) {
-				config.apiUrl = `https://test.wikipedia.org/w/api.php`;
-			} else {
-				if (!config.apiUrl) {
-					const site = await prompt('> Enter sitename (eg. en.wikipedia.org)', 'en.wikipedia.org');
-					config.apiUrl = `https://${site}/w/api.php`;
-				}
-			}
-			this.api.setOptions(config);
 		}
+		if (args.testwiki) {
+			config.apiUrl = `https://test.wikipedia.org/w/api.php`;
+		} else {
+			if (!config.apiUrl) {
+				if (Object.keys(config).length) {
+					log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
+				}
+				const site = await prompt('> Enter sitename (eg. en.wikipedia.org)', 'en.wikipedia.org');
+				config.apiUrl = `https://${site}/w/api.php`;
+			}
+		}
+		this.api.setOptions(config);
 	}
 
 	async login() {
