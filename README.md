@@ -8,14 +8,11 @@ This is the enwiki localisation of [Twinkle core](https://github.com/wikimedia-g
 
 This project is written in TypeScript using ES modules format. Webpack is used as the module bundler.
 
-Run `npm start` for development. This invokes [webpack-dev-server](https://webpack.js.org/configuration/dev-server/), which refreshes the application in the browser on every code change. The bundled application can be accessed via http://localhost:5500/bundle.js, which you can import into your on-wiki common.js page. You'll need to provide the dependencies too:
+Run `npm start` for development. This invokes [webpack-dev-server](https://webpack.js.org/configuration/dev-server/), which refreshes the application in the browser on every code change. The bundled application can be accessed via http://localhost:5500/, which you can import into your on-wiki common.js page. 
 
-The following can be used on the [testwiki](https://test.wikipedia.org/):
-
+Add the following to your on-wiki common.js page:
 ```js
-mw.loader.using('ext.gadget.Twinkle-dependencies').then(function () {
-	mw.loader.load('http://localhost:5500/bundle.js');
-});
+mw.loader.load('http://localhost:5500/'); 
 ```
 
 A sourcemap is generated to allow debugging of TypeScript code using the browser's dev tools, in which you can place debug breakpoints.
