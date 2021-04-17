@@ -139,7 +139,7 @@ export class LastDiff {
 	}
 
 	expectToBeTwinkleEdit() {
-		expect(this.tags).toEqual(['twinkle']);
+		expect(this.tags).toContain('twinkle');
 		return this;
 	}
 
