@@ -1086,12 +1086,6 @@ class RedirectMode extends TagMode {
 
 	makeForm(Window) {
 		super.makeForm(Window);
-
-		if (getPref('customRedirectTagList').length) {
-			this.scrollbox.append({ type: 'header', label: 'Custom tags' });
-			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: getPref('customRedirectTagList') });
-		}
-
 		this.formAppendPatrolLink();
 	}
 
@@ -1197,7 +1191,7 @@ class ArticleMode extends TagMode {
 	assumeUnknownTagsGroupable = false;
 
 	static isActive() {
-		return [0, 118].indexOf(mw.config.get('wgNamespaceNumber')) !== -1 && mw.config.get('wgCurRevisionId'); // check if page exists
+		return [0, 118].indexOf(mw.config.get('wgNamespaceNumber')) !== -1 && !!mw.config.get('wgCurRevisionId'); // check if page exists
 	}
 
 	getMenuTooltip() {
@@ -1210,12 +1204,6 @@ class ArticleMode extends TagMode {
 
 	makeForm(Window) {
 		super.makeForm(Window);
-
-		// append any custom tags
-		if (getPref('customTagList').length) {
-			this.scrollbox.append({ type: 'header', label: 'Custom tags' });
-			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: getPref('customTagList') });
-		}
 
 		this.form.append({
 			type: 'checkbox',
@@ -1240,6 +1228,11 @@ class ArticleMode extends TagMode {
 		});
 
 		this.formAppendPatrolLink();
+	}
+
+	// For historical reasons, this isn't named customArticleTagList
+	getCustomTagPrefName() {
+		return 'customTagList';
 	}
 
 	parseExistingTags() {
@@ -1655,12 +1648,6 @@ class FileMode extends TagMode {
 
 	makeForm(Window) {
 		super.makeForm(Window);
-
-		if (getPref('customFileTagList').length) {
-			this.scrollbox.append({ type: 'header', label: 'Custom tags' });
-			this.scrollbox.append({ type: 'checkbox', name: 'tags', list: getPref('customFileTagList') });
-		}
-
 		this.formAppendPatrolLink();
 	}
 
