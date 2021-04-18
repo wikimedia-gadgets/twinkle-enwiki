@@ -1,0 +1,10 @@
+# Trigger an automated PR by dependabot when dependencies become outdated
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-type: production
