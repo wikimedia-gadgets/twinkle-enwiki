@@ -1,0 +1,26 @@
+# Preserve the build output of every successful build on Toolforge
+
+name: Build
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm ci
+      - run: grunt build
+      - name: Publish build output on Toolforge
+        uses: garygrossgarten/github-action-scp@dba89d858413133b6e35da91a3c989cc8cde3ad4
+        with:
+          local: ${{github.workspace}}/build
+          remote: /data/project/twinkle/public_html/enwiki/builds/${{github.sha}}
+          host: login.toolforge.org
+          username: ${{secrets.TOOLFORGE_USERNAME}}
+          privateKey: ${{secrets.TOOLFORGE_PRIVATE_KEY}}
