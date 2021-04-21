@@ -19,7 +19,7 @@ jobs:
           cd ..
           git clone https://github.com/wikimedia-gadgets/twinkle-core.git
           cd twinkle-core
-          npm install --only=production
+          npm install
           cd ../twinkle-enwiki
       - run: npm ci
       - run: grunt build
