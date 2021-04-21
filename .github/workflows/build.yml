@@ -14,6 +14,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+      - name: Clone twinkle-core
+        run: |
+          cd ..
+          git clone https://github.com/wikimedia-gadgets/twinkle-core.git
+          cd twinkle-core
+          npm install --only=production
+          cd ../twinkle-enwiki
       - run: npm ci
       - run: grunt build
       - name: Publish build output on Toolforge
