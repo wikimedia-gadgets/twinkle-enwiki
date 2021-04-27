@@ -6,5 +6,8 @@
 	"delete-talk-summary": "[[WP:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of deleted page \"$1\"",
 	"block-64-help": "It's usually fine, if not better, to [[WP:/64|just block the /64]] range ([[Special:Contributions/$1|$1]]).",
 	"undeleting-talk-summary": "Undeleting [[Help:Talk page|talk page]] of \"$1\"",
-	"protect-tag-small-label": "Iconify (small=yes)"
+	"protect-tag-small-label": "Iconify (small=yes)",
+	"pref-xfdwatchdiscussion-tooltip": 	"This refers to the discussion subpage (for AfD and MfD) or the daily log page (for TfD, CfD, RfD and FfD)",
+	"pref-xfdwatchlist-label": "Add the daily log/list page to the watchlist (AfD and MfD)",
+	"pref-xfdwatchlist-tooltip": "This only applies for AfD and MfD, where the discussions are transcluded onto a daily log page (for AfD) or the main MfD page (for MfD)."
 }
