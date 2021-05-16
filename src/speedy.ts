@@ -1,5 +1,4 @@
 import { SpeedyCore, criterion } from './core';
-import { arr_includes } from './utils';
 import { hatnoteRegex } from './common';
 
 export class Speedy extends SpeedyCore {
@@ -89,7 +88,7 @@ export class Speedy extends SpeedyCore {
 		},
 		{
 			label: 'Files',
-			visible: (self) => !self.isRedirect && arr_includes([6, 7], self.namespace),
+			visible: (self) => !self.isRedirect && [6, 7].includes(self.namespace),
 			list: [
 				{
 					label: 'F1: Redundant file',
@@ -250,7 +249,7 @@ export class Speedy extends SpeedyCore {
 		},
 		{
 			label: 'Articles',
-			visible: (self) => !self.isRedirect && arr_includes([0, 1], self.namespace),
+			visible: (self) => !self.isRedirect && [0, 1].includes(self.namespace),
 			list: [
 				{
 					label: 'A1: No context. Articles lacking sufficient context to identify the subject of the article.',
@@ -395,7 +394,7 @@ export class Speedy extends SpeedyCore {
 		},
 		{
 			label: 'Categories',
-			visible: (self) => !self.isRedirect && arr_includes([14, 15], self.namespace),
+			visible: (self) => !self.isRedirect && [14, 15].includes(self.namespace),
 			list: [
 				{
 					label: 'C1: Empty categories',
@@ -430,7 +429,7 @@ export class Speedy extends SpeedyCore {
 		},
 		{
 			label: 'User pages',
-			visible: (self) => arr_includes([2, 3], self.namespace),
+			visible: (self) => [2, 3].includes(self.namespace),
 			list: [
 				{
 					label: 'U1: User request',
@@ -501,7 +500,7 @@ export class Speedy extends SpeedyCore {
 		},
 		{
 			label: 'Portals',
-			visible: (self) => !self.isRedirect && arr_includes([100, 101], self.namespace),
+			visible: (self) => !self.isRedirect && [100, 101].includes(self.namespace),
 			list: [
 				{
 					label: 'P1: Portal that would be subject to speedy deletion if it were an article',

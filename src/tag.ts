@@ -1,5 +1,4 @@
 import { Twinkle, Page, Config, Preference, PreferenceGroup, getPref } from './core';
-import { arr_includes } from './utils';
 import { TagCore, tagData, tagListType, TagMode, tagSubgroup } from './core';
 import { hatnoteRegex } from './common';
 
@@ -1294,13 +1293,13 @@ class ArticleMode extends TagMode {
 	validateInput() {
 		let params = this.params,
 			tags = params.tags;
-		if (['Merge', 'Merge from', 'Merge to'].filter((t) => arr_includes(tags, t)).length > 1) {
+		if (['Merge', 'Merge from', 'Merge to'].filter((t) => tags.includes(t)).length > 1) {
 			return 'Please select only one of {{Merge}}, {{Merge from}} and {{Merge to}}. If several merges are required, use {{Merge}} and separate the article names with pipes (although in this case Twinkle cannot tag the other articles automatically).';
 		}
 		if ((params.mergeTagOther || params.mergeReason) && params.mergeTarget.indexOf('|') !== -1) {
 			return 'Tagging multiple articles in a merge, and starting a discussion for multiple articles, is not supported at the moment. Please turn off "tag other article", and/or clear out the "reason" box, and try again.';
 		}
-		if (['Not English', 'Rough translation'].filter((t) => arr_includes(tags, t)).length > 1) {
+		if (['Not English', 'Rough translation'].filter((t) => tags.includes(t)).length > 1) {
 			return 'Please select only one of {{Not English}} and {{Rough translation}}..';
 		}
 	}
@@ -1664,7 +1663,7 @@ class FileMode extends TagMode {
 			['PNG version available', 'Vector version available'],
 		];
 		for (let set of incompatibleSets) {
-			if (set.filter((t) => arr_includes(tags, t)).length > 1) {
+			if (set.filter((t) => tags.includes(t)).length > 1) {
 				return 'Please select only one of: {{' + set.join('}}, {{') + '}}.';
 			}
 		}

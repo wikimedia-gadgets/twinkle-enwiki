@@ -1,5 +1,5 @@
 import { getPref, Page, Api, PreferenceGroup, Preference, Config } from './core';
-import { addNs, arr_includes, makeTemplate, obj_entries, stripNs } from './utils';
+import { addNs, makeTemplate, obj_entries, stripNs } from './utils';
 import { XfdCore, XfdMode } from './core';
 import { makeFindSourcesDiv, hatnoteRegex } from './common';
 
@@ -1004,7 +1004,7 @@ class Tfd extends XfdMode {
 			$,
 			obj_entries(categoryNotificationPageMap)
 				.filter(([cat, page]) => {
-					return arr_includes(inCategories, cat);
+					return inCategories.includes(cat);
 				})
 				.map(([cat, page]) => {
 					return this.notifyTalkPage(page, new Morebits.status('Notifying ' + page + ' of template nomination'));

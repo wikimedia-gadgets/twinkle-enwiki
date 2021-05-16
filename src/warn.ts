@@ -1,4 +1,4 @@
-import { WarnCore, obj_entries, warningLevel, arr_includes, warning, getPref } from './core';
+import { WarnCore, obj_entries, warningLevel, warning, getPref } from './core';
 
 export class Warn extends WarnCore {
 	footerlinks = {
@@ -1197,7 +1197,7 @@ export class Warn extends WarnCore {
 
 	customiseSummaryWithInput(summary: string, input: string, messageData: warning) {
 		// these templates require a username
-		if (arr_includes(['uw-agf-sock', 'uw-socksuspect', 'uw-aiv'], messageData.template)) {
+		if (['uw-agf-sock', 'uw-socksuspect', 'uw-aiv'].includes(messageData.template)) {
 			return summary + ' of [[:User:' + input + ']]';
 		}
 		return super.customiseSummaryWithInput(summary, input, messageData);
