@@ -10,17 +10,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout twinkle-enwiki
+        uses: actions/checkout@v2
+
+        # need to do this as long as we're relying on the latest twinkle-core rather than the npm packagee
+      - name: Checkout twinkle-core
+        uses: actions/checkout@v2
         with:
-          node-version: 14
-      - name: Clone twinkle-core
-        run: |
-          cd ..
-          git clone https://github.com/wikimedia-gadgets/twinkle-core.git
-          cd twinkle-core
-          npm install
-          cd ../twinkle-enwiki
+          repository: wikimedia-gadgets/twinkle-core
+          path: '..'
+      - run: cd ../twinkle-core && npm ci && cd -
+
       - run: npm ci
       - run: grunt build
       - name: Publish build output on Toolforge

@@ -1,8 +1,10 @@
 /**
- * Allow global access for certain objects for debugging and console-based testing
+ * Allow global access for certain objects for debugging and console-based testing.
+ * In addition to this, {@link registerModule} exposes initialised module class
+ * objects (eg. Twinkle.tag is the tag class object).
  */
 
-import { msg, Twinkle, registerModule, Api, Page } from './core';
+import { msg, Twinkle, registerModule, Api, Page, SiteConfig } from './core';
 
 // @ts-ignore
 window.Twinkle = Twinkle;
@@ -12,6 +14,7 @@ $.extend(Twinkle, {
 	msg,
 	Page,
 	Api,
+	SiteConfig,
 });
 
 // Make jQuery Deferred exceptions hit the source map during debugging

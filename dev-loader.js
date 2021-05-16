@@ -5,7 +5,7 @@
  * are is served via webpack-dev-server's before config
  *
  * http://localhost:5500/css loads css/twinkle.css via another of
- * webbpack-dev-server before configs
+ * webpack-dev-server before configs
  *
  * http://localhost:5500/twinkle.js is served in-memory
  * via webpack-dev-server
@@ -17,7 +17,7 @@
 
 mw.loader.using([
 	'mediawiki.api', 'mediawiki.Title', 'mediawiki.user', 'mediawiki.util',
-	'mediawiki.libs.pluralruleparser', 'es6-promise'
+	'mediawiki.libs.pluralruleparser', 'es6-polyfills'
 ]).then(function() {
 	mw.loader.getScript('http://localhost:5500/core/morebits/morebits.js').then(function () {
 		mw.loader.getScript('http://localhost:5500/twinkle.js');
