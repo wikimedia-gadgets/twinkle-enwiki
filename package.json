@@ -24,7 +24,7 @@
 	],
 	"license": "CC-BY-SA-3.0",
 	"dependencies": {
-		"tslib": "2.0.3",
+		"tslib": "2.3.0",
 		"twinkle-core": "^3.0.2-beta"
 	},
 	"devDependencies": {
