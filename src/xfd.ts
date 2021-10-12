@@ -643,7 +643,7 @@ class Afd extends XfdMode {
 
 	addToDelsortLists() {
 		let params = this.params;
-		let promises = params.delsortCats.map((cat, idx) => {
+		let promises = params.delsortCats.map((cat) => {
 			var delsortPage = new Page(
 				'Wikipedia:WikiProject Deletion sorting/' + cat,
 				'Adding to list of ' + cat + '-related deletion discussions'
@@ -1734,8 +1734,8 @@ class Rfd extends XfdMode {
 	static venueCode = 'RfD';
 	static venueLabel = 'RfD (Redirects for discussion)';
 
-	static isDefaultChoice() {
-		return mw.config.get('wgIsRedirect') || !!document.getElementById('softredirect');
+	static isDefaultChoice(): boolean {
+		return !!mw.config.get('wgIsRedirect') || !!document.getElementById('softredirect');
 	}
 
 	getFieldsetLabel() {
@@ -1785,7 +1785,6 @@ class Rfd extends XfdMode {
 
 	evaluate() {
 		super.evaluate();
-		let tm = new Morebits.taskManager(this);
 		this.tm.add(this.findTarget, []);
 		this.tm.add(this.tagPage, [this.findTarget]);
 		this.tm.add(this.addToList, [this.findTarget, this.tagPage], this.printReasonText);

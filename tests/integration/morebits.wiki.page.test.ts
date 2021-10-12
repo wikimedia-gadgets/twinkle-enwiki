@@ -1,5 +1,8 @@
 import { bot, bot2, loadExpectInBrowser, loadMorebits, setupMWBrowser, setupMwn } from './test_base';
 
+// NOTE: morebits.wiki.page can possibly be also tested with just mock-mediawiki,
+// avoiding the whole overhead of headless browsers and playwright
+
 describe('Morebits.wiki.page', () => {
 	jest.setTimeout(20000);
 
@@ -31,6 +34,8 @@ describe('Morebits.wiki.page', () => {
 		// result should be undefined as the promise internally doesn't resolve
 		expect(result).toBeUndefined();
 	});
+
+	test('save', async () => {});
 
 	test('prepend', async () => {
 		let randomPage = 'Prepend test page/' + Math.random();
@@ -74,6 +79,16 @@ describe('Morebits.wiki.page', () => {
 		expect((await bot.read(randomPage)).missing).toBe(true);
 	});
 
+	// TODO
+
+	test.skip('undeletePage', async () => {});
+
+	test.skip('protect', async () => {});
+
+	test.skip('patrol', async () => {});
+
+	test.skip('triage', async () => {});
+
 	test('looks up page creator', async () => {
 		let [creator, creationTS] = await page.evaluate(() => {
 			var d = $.Deferred();
@@ -107,5 +122,40 @@ describe('Morebits.wiki.page', () => {
 		}, pageName);
 		expect(creator).toBe('Wikiuser2');
 		expect(creationTS).toBe(editTime);
+	});
+
+	test('lookupCreator when original creation is a redirect (with localised redirect magic word)', async () => {
+		let pageName1 = 'Lookup creator test/' + Math.random();
+		let pageName2 = 'Lookup creator test/' + Math.random();
+		await Promise.all([
+			// parallelize for speed
+			bot.create(pageName1, '#rr [[Main Page]]'), // redirect
+			bot.create(pageName2, '#rwerr [[Main Page]]'), // not a redirect
+			bot2.login(),
+		]);
+		// Make an edit using the 2nd account, grab the timestamp
+		let [editTime1, editTime2] = await Promise.all([
+			bot2.save(pageName1, 'Non-redirect content').then((data) => data.newtimestamp),
+			bot2.save(pageName2, 'Non-redirect content').then((data) => data.newtimestamp),
+		]);
+		let [creator1, creator2] = await page.evaluate(
+			([pageName1, pageName2]) => {
+				Morebits.l10n.redirectTagAliases = ['#REDIRECT', '#RR'];
+				var d = $.Deferred();
+				var p1 = new Morebits.wiki.page(pageName1);
+				var p2 = new Morebits.wiki.page(pageName2);
+				p1.setLookupNonRedirectCreator(true);
+				p2.setLookupNonRedirectCreator(true);
+				p1.lookupCreation(function () {
+					p2.lookupCreation(function () {
+						d.resolve([p1.getCreator(), p2.getCreator()]);
+					});
+				});
+				return d;
+			},
+			[pageName1, pageName2]
+		);
+		expect(creator1).toBe('Wikiuser2');
+		expect(creator2).toBe('Wikiuser');
 	});
 });

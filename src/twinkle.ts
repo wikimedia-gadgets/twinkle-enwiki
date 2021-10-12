@@ -1,4 +1,4 @@
-import { Twinkle, addMessages, init, loadAdditionalMediaWikiMessages, SiteConfig } from './core';
+import { Twinkle, init, SiteConfig } from './core';
 import messages from './messages.json';
 import mwMessageList from './mw-messages';
 
@@ -36,8 +36,7 @@ Twinkle.changeTags = 'twinkle';
 Twinkle.summaryAd = ' ([[WP:TW|TW]])';
 
 Twinkle.messageOverrides = messages;
-
-Twinkle.preModuleInitHooks = [() => loadAdditionalMediaWikiMessages(mwMessageList)];
+Twinkle.extraMwMessages = mwMessageList;
 
 Twinkle.registeredModules = [
 	Xfd,
